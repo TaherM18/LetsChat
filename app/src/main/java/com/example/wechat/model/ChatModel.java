@@ -1,7 +1,7 @@
 package com.example.wechat.model;
 
-public class Chat {
-    public Chat(String username, String message, String time, int messageCount) {
+public class ChatModel {
+    public ChatModel(String username, String message, String time, int messageCount) {
         this.username = username;
         this.message = message;
         this.time = time;
