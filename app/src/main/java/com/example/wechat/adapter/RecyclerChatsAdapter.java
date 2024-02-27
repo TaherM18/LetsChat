@@ -1,6 +1,7 @@
 package com.example.wechat.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wechat.ChatActivity;
 import com.example.wechat.R;
 import com.example.wechat.model.ChatModel;
 
@@ -46,6 +49,22 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
         holder.txtMessageCount.setText(String.valueOf(chatModelList.get(position).getMessageCount()));
 
         setAnimation(holder.itemView, position);
+
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chatIntent = new Intent(context, ChatActivity.class);
+                chatIntent.putExtra("userId", chatModelList.get(position).getUsername());
+                context.startActivity(chatIntent);
+            }
+        });
+
+        holder.constraintLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
     }
 
     @Override
@@ -57,6 +76,8 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
 
         private ImageView imgProfile;
         private TextView txtUsername, txtMessage, txtTime, txtMessageCount;
+        private ConstraintLayout constraintLayout;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -65,6 +86,7 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
             txtMessage = itemView.findViewById(R.id.txtMessage);
             txtTime = itemView.findViewById(R.id.txtTime);
             txtMessageCount = itemView.findViewById(R.id.txtMessageCount);
+            constraintLayout = itemView.findViewById(R.id.constraintLayout);
         }
     }
 

@@ -25,6 +25,6 @@ public class ChatModel {
     }
 
     private String username, message, time;
-    private int messageCount;
+    private int messageCount, userId;
 
 }
