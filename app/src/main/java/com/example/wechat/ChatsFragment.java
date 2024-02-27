@@ -4,12 +4,19 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.wechat.adapter.RecyclerChatsAdapter;
+import com.example.wechat.model.ChatModel;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,8 +33,11 @@ public class ChatsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Context context;
+
+
+
     private RecyclerView recyclerChatsView;
+    private List<ChatModel> chatModelList = new LinkedList<ChatModel>();
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -66,7 +76,18 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
         recyclerChatsView = view.findViewById(R.id.recyclerChatsView);
-        recyclerChatsView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerChatsView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        for (int i = 0; i < 20; i++) {
+            chatModelList.add(new ChatModel("Taher Maimoon", "Hello!", "11:00 AM", 1));
+        }
+
+        RecyclerChatsAdapter chatsAdapter = new RecyclerChatsAdapter(getContext(), chatModelList);
+
+        DividerItemDecoration DIDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        recyclerChatsView.addItemDecoration(DIDecoration);
+
+        recyclerChatsView.setAdapter(chatsAdapter);
 
         return view;
 

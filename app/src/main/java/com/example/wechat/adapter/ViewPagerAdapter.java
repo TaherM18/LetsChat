@@ -1,5 +1,7 @@
 package com.example.wechat.adapter;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,8 +15,9 @@ import com.example.wechat.StoriesFragment;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final int TAB_COUNT = 3;
     private final String[] TAB_NAMES = new String[] {"Chats", "Status", "Calls"};
+    private Context context;
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm) {
+    public ViewPagerAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm);
     }
 

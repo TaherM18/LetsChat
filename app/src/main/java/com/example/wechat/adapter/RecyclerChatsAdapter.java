@@ -23,11 +23,17 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
     private List<ChatModel> chatModelList;
     private int lastPosition = -1;
 
+    public RecyclerChatsAdapter(Context context, List<ChatModel> chatModelList) {
+        this.context = context;
+        this.chatModelList = chatModelList;
+    }
+
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_chats_row, parent, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.recycler_chats_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -37,7 +43,9 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
         holder.txtUsername.setText(chatModelList.get(position).getUsername());
         holder.txtMessage.setText(chatModelList.get(position).getMessage());
         holder.txtTime.setText(chatModelList.get(position).getTime());
-        holder.txtMessageCount.setText(chatModelList.get(position).getMessageCount());
+        holder.txtMessageCount.setText(String.valueOf(chatModelList.get(position).getMessageCount()));
+
+        setAnimation(holder.itemView, position);
     }
 
     @Override

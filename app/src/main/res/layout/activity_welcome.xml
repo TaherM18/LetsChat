@@ -45,7 +45,7 @@
         android:text="Read our privacy policy. Tap Agree and Continue to accept the Terms of Service. "
         android:textColor="@color/design_default_color_on_secondary"
         android:textSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/button1"
+        app:layout_constraintBottom_toTopOf="@+id/btnAgree"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +53,7 @@
         tools:ignore="TextSizeCheck" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnAgree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Agree and continue"
