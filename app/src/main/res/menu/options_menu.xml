@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/opt_camera"
+        android:title="Camera"
+        android:icon="@drawable/photo_camera_24"
+        android:iconTint="@color/cardview_light_background"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/opt_search"
+        android:title="Search"
+        android:icon="@drawable/search_24"
+        android:iconTint="@color/cardview_light_background"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/opt_group"
+        android:title="New Group"
+        android:icon="@drawable/group_add_24"
+        android:iconTint="@color/black" />
+    <item
+        android:id="@+id/opt_broadcast"
+        android:title="New Broadcast"
+        android:icon="@drawable/broadcast_on_home_24"
+        android:iconTint="@color/black" />
+    <item
+        android:id="@+id/opt_settings"
+        android:title="Settings"
+        android:icon="@drawable/settings_24"
+        android:iconTint="@color/black" />
+</menu>

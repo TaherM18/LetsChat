@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="32dp"
     android:fitsSystemWindows="true"
-    android:padding="16dp"
-    tools:context=".WelcomeActivity">
+    android:paddingStart="16dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="32dp"
+    tools:context=".WelcomeActivity"
+    android:background="@color/design_default_color_on_primary">
 
     <ImageView
         android:id="@+id/imgDoodle"
