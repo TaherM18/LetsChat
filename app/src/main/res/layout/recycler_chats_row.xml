@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="4dp"
+    android:elevation="2dp"
     app:cardCornerRadius="4dp"
+    app:cardUseCompatPadding="true"
     app:cardBackgroundColor="@color/cardview_light_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +26,7 @@
             android:src="@drawable/ic_launcher_background" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/username"
+            android:id="@+id/txtUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BAITE - AMMI"
@@ -40,7 +41,7 @@
             app:layout_constraintHorizontal_bias="0"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tweet_text"
+            android:id="@+id/txtMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Farru: Ringz app to watch movies for f..."
@@ -48,12 +49,12 @@
             android:layout_marginLeft="16dp"
             android:textColor="@color/material_on_surface_emphasis_high_type"
             app:layout_constraintStart_toEndOf="@id/profile_image"
-            app:layout_constraintTop_toBottomOf="@id/username"
+            app:layout_constraintTop_toBottomOf="@id/txtUsername"
             app:layout_constrainedWidth="true"
              />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/timestamp"
+            android:id="@+id/txtTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="11:48 PM"
@@ -65,7 +66,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/timestamp"
+            app:layout_constraintTop_toBottomOf="@id/txtTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:cardCornerRadius="50dp"
             app:cardBackgroundColor="#fece3f">
