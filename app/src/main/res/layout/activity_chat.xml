@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/recycler_message_row"/>
 
     <ImageView
         android:id="@+id/btnAdd"

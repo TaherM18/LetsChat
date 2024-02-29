@@ -84,8 +84,8 @@ public class ChatsFragment extends Fragment {
 
         RecyclerChatsAdapter chatsAdapter = new RecyclerChatsAdapter(getContext(), chatModelList);
 
-        DividerItemDecoration DIDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        recyclerChatsView.addItemDecoration(DIDecoration);
+//        DividerItemDecoration DIDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+//        recyclerChatsView.addItemDecoration(DIDecoration);
 
         recyclerChatsView.setAdapter(chatsAdapter);
 
