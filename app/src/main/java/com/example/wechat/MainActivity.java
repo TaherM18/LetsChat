@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.wechat.adapter.ViewPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         floatBtnContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Floating button clicked", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, ContactsActivity.class);
                 startActivity(i);
             }

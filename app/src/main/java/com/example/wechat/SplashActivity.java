@@ -47,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
                         jumpTime += 10;
                         progressBar.setProgress(jumpTime);
                     }
-                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
                     startActivity(intent);
                     finish();
                 }

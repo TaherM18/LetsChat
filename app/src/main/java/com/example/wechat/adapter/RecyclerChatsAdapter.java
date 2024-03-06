@@ -72,6 +72,10 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
         return chatModelList.size();
     }
 
+
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imgProfile;
