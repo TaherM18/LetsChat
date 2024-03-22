@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "WeChat"
+rootProject.name = "LetsChat"
 include(":app")
  

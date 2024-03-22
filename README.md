@@ -1,6 +1,6 @@
-# Project Title: LetsChat
+# Project Title: WeChat
 
-🚀 Welcome to LetsChat, an advanced mobile application that redefines the way we communicate and analyze user interactions on mobile devices!
+🚀 Welcome to WeChat, an advanced mobile application that redefines the way we communicate and analyze user interactions on mobile devices!
 An application for secure communication and in-depth analytics. Leverage cutting-edge features, including end-to-end encryption, sensor utilization, real-time location sharing, and customizable reports.📱✨
 
 ## Key Features
@@ -22,4 +22,5 @@ An application for secure communication and in-depth analytics. Leverage cutting
 2. Check out our [Contribution Guidelines](link-to-guidelines) to get started.
 3. Join our community on [Discord/Slack] to connect with other contributors.
 
+🌟 Let's build the future of mobile communication together! 🌐💬
 
