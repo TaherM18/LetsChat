@@ -6,7 +6,9 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import com.example.letschat.databinding.ActivityUsernameAuthBinding;
 import com.example.letschat.view.MainActivity;
 import com.example.letschat.R;
 import com.example.letschat.model.UserModel;
@@ -30,6 +32,13 @@ public class UsernameAuthActivity extends AppCompatActivity {
 
         phoneNumber = getIntent().getExtras().getString("phone");
         getUsername();
+
+        binding.btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUsername();
+            }
+        });
     }
 
     private void setUsername() {
@@ -45,7 +54,7 @@ public class UsernameAuthActivity extends AppCompatActivity {
             userModel.setUserName(userName);
         }
         else {
-            userModel = new UserModel(userName,phoneNumber, Timestamp.now());
+            userModel = new UserModel(userName, phoneNumber, Timestamp.now());
         }
         FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

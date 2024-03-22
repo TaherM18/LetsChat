@@ -18,12 +18,31 @@
         android:theme="@style/Theme.LetsChat"
         tools:targetApi="31"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".view.startup.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.auth.PhoneAuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
+
+        <activity
+            android:name=".view.auth.OtpAuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
+
         <activity
             android:name=".view.auth.UsernameAuthActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.auth.OtpAuthActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.contact.ContactsActivity"
             android:exported="false" />
@@ -39,21 +58,11 @@
         <activity
             android:name=".view.auth.SetUserInfoActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.auth.PhoneAuthActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.startup.WelcomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.startup.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".view.MainActivity"
             android:exported="false" />

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.letschat.databinding.ActivitySetUserInfoBinding;
 import com.example.letschat.view.MainActivity;
 import com.example.letschat.R;
 import com.example.letschat.model.UserModel;

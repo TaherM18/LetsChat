@@ -68,8 +68,8 @@ public class OtpAuthActivity extends AppCompatActivity {
     }
 
     private void sendOtp(String phoneNumber, boolean isResend) {
-        startResendTimer();
         setInProgress(true);
+        startResendTimer();
 
         PhoneAuthOptions.Builder builder = PhoneAuthOptions.newBuilder(mAuth)
                 .setPhoneNumber(phoneNumber)
@@ -142,11 +142,20 @@ public class OtpAuthActivity extends AppCompatActivity {
             @Override
             public void run() {
                 timeoutSeconds--;
-                binding.btnResend.setText("Resend OTP in "+timeoutSeconds+"s");
+
+                // Post a Runnable to update UI components on the main UI thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.btnResend.setText(String.format("Resend OTP in %ds", timeoutSeconds));
+                    }
+                });
 
                 if (timeoutSeconds <= 0) {
                     timeoutSeconds = 60L;
                     timer.cancel();
+
+                    // Post a Runnable to enable the button on the main UI thread
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -157,4 +166,5 @@ public class OtpAuthActivity extends AppCompatActivity {
             }
         }, 0, 1000);
     }
+
 }

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.letschat.R;
+import com.example.letschat.databinding.ActivityMainBinding;
 import com.example.letschat.menu.CallsFragment;
 import com.example.letschat.menu.ChatsFragment;
 import com.example.letschat.menu.StoriesFragment;
