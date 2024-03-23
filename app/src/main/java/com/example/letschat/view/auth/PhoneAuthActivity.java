@@ -43,6 +43,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                 Intent intent = new Intent(PhoneAuthActivity.this, OtpAuthActivity.class);
                 intent.putExtra("phone", binding.countryCodePicker.getFullNumberWithPlus());
                 startActivity(intent);
+                finish();
             }
         });
     }

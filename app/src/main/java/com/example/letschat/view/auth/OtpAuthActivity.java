@@ -45,8 +45,8 @@ public class OtpAuthActivity extends AppCompatActivity {
 
         phoneNumber = getIntent().getStringExtra("phone");
 
-        Map<String, String> data = new HashMap<>();
-        FirebaseFirestore.getInstance().collection("test").add(data);
+//        Map<String, String> data = new HashMap<>();
+//        FirebaseFirestore.getInstance().collection("test").add(data);
 
         sendOtp(phoneNumber, false);
 
@@ -124,9 +124,10 @@ public class OtpAuthActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 setInProgress(false);
                 if (task.isSuccessful()) {
-                    Intent intent = new Intent(getApplicationContext(), UsernameAuthActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ProfileAuthActivity.class);
                     intent.putExtra("phone", phoneNumber);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     AndroidUtil.showToast(getApplicationContext(), "OTP Verification failed");

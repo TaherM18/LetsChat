@@ -21,8 +21,9 @@
                 android:id="@+id/material_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:title="LetsChat"
-                app:titleTextColor="@color/white" />
+                app:title="@string/app_name"
+                app:titleTextColor="@color/white"
+                app:menu="@menu/options_menu" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,16 +31,16 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbar_layout"
-            android:background="@color/color_primary"
+            app:tabBackground="@color/color_primary"
             app:tabGravity="fill"
             app:tabIndicator="@color/color_primary"
-            app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="2dp"
+            app:tabIndicatorColor="@color/white"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/white">
+            app:tabTextColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar_layout">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -63,7 +64,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/tab_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_action"
@@ -73,8 +77,18 @@
             app:tint="@color/white"
             android:backgroundTint="@color/color_primary"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
             app:useCompatPadding="true"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="8dp"
+            app:menu="@menu/main_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

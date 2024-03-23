@@ -1,7 +1,10 @@
 package com.example.letschat.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -21,5 +24,11 @@ public class AndroidUtil {
             progressBar.setVisibility(View.GONE);
             button.setVisibility(View.VISIBLE);
         }
+    }
+
+    public static String getFileExtension(Context context, Uri uri) {
+        ContentResolver contentResolver = context.getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }

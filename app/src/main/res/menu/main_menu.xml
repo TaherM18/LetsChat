@@ -3,45 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_search"
-        android:icon="@drawable/search_24"
-        android:iconTint="@color/white"
-        android:title="Search"
-        app:showAsAction="always" />
+        android:id="@+id/menu_chats"
+        android:title="Chats"
+        android:icon="@drawable/chat_24"
+        android:iconTint="@color/color_primary"/>
 
-    <group
-        android:id="@+id/menu_more">
-        <item
-            android:id="@+id/menu_group"
-            android:icon="@drawable/group_add_24"
-            android:iconTint="@color/white"
-            android:title="New Group" />
+    <item
+        android:id="@+id/menu_status"
+        android:title="Status"
+        android:icon="@drawable/broadcast_on_home_24"
+        android:iconTint="@color/color_primary"/>
 
-        <item
-            android:id="@+id/menu_broadcast"
-            android:icon="@drawable/broadcast_on_home_24"
-            android:iconTint="@color/white"
-            android:title="New Broadcast" />
-
-        <item
-            android:id="@+id/menu_web"
-            android:icon="@drawable/web_24"
-            android:iconTint="@color/white"
-            android:title="LetsChat Web" />
-
-        <item
-            android:id="@+id/menu_starred_msg"
-            android:icon="@drawable/star_24"
-            android:iconTint="@color/white"
-            android:title="Starred Messages" />
-
-        <item
-            android:id="@+id/menu_settings"
-            android:icon="@drawable/settings_24"
-            android:iconTint="@color/black"
-            android:title="Settings" />
-
-    </group>
-
+    <item
+        android:id="@+id/menu_calls"
+        android:title="Calls"
+        android:icon="@drawable/phone_24"
+        android:iconTint="@color/color_primary"/>
 
 </menu>

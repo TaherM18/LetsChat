@@ -40,7 +40,7 @@
             android:windowSoftInputMode="stateVisible"/>
 
         <activity
-            android:name=".view.auth.UsernameAuthActivity"
+            android:name=".view.auth.ProfileAuthActivity"
             android:exported="false" />
 
         <activity

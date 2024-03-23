@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.letschat.R;
+import com.example.letschat.databinding.ChatRowBinding;
 import com.example.letschat.model.ChatModel;
 
 import java.util.List;
@@ -24,18 +25,19 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
 
     private Context context;
     private List<ChatModel> chatModelList;
+    private LayoutInflater layoutInflater;
     private int lastPosition = -1;
 
     public RecyclerChatsAdapter(Context context, List<ChatModel> chatModelList) {
         this.context = context;
         this.chatModelList = chatModelList;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.chat_row, parent, false);
         return new ViewHolder(view);
     }
@@ -44,15 +46,15 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ChatModel chatModel = chatModelList.get(position);
 
-        Glide.with(context).load(chatModel.getProfileUrl()).into(holder.imgProfile);
-        holder.txtUsername.setText(chatModel.getUsername());
-        holder.txtMessage.setText(chatModel.getMessage());
-        holder.txtTime.setText(chatModel.getDateTime());
-        holder.txtMessageCount.setText(chatModel.getMessageCount());
+        Glide.with(context).load(chatModel.getProfileUrl()).into(holder.binding.civProfile);
+        holder.binding.tvUsername.setText(chatModel.getUsername());
+        holder.binding.tvMessage.setText(chatModel.getMessage());
+        holder.binding.tvDatetime.setText(chatModel.getDateTime());
+        holder.binding.tvMessageCount.setText(chatModel.getMessageCount());
 
         setAnimation(holder.itemView, position);
 
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Intent chatIntent = new Intent(context, ChatActivity.class);
@@ -61,7 +63,7 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
             }
         });
 
-        holder.constraintLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 return true;
@@ -77,22 +79,13 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
 
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView imgProfile;
-        private TextView txtUsername, txtMessage, txtTime, txtMessageCount;
-        private ConstraintLayout constraintLayout;
+        ChatRowBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imgProfile = itemView.findViewById(R.id.civ_profile);
-            txtUsername = itemView.findViewById(R.id.tv_username);
-            txtMessage = itemView.findViewById(R.id.tv_message);
-            txtTime = itemView.findViewById(R.id.tv_datetime);
-            txtMessageCount = itemView.findViewById(R.id.tv_message_count);
-            constraintLayout = itemView.findViewById(R.id.constraint_layout);
+            binding = ChatRowBinding.bind(itemView);
         }
     }
 

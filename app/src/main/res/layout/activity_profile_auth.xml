@@ -17,25 +17,25 @@
             android:backgroundTint="@color/material_on_surface_disabled"
             android:gravity="center"
             android:text="1"
-            android:textSize="16sp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/txt2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt2"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:textSize="16sp"
-            android:text="2"
             android:background="@drawable/circle_24"
             android:backgroundTint="@color/material_on_surface_disabled"
             android:gravity="center"
+            android:text="2"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt3"
@@ -45,37 +45,51 @@
             android:backgroundTint="@color/color_primary"
             android:gravity="center"
             android:text="3"
-            android:textSize="16sp"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt2"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imgPhone"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_profile"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:src="@drawable/person_24"
-            app:tint="@color/color_primary"
+            android:src="@drawable/person_placeholder_360x360"
+            android:tint="@color/color_primary"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/color_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25"/>
+            app:layout_constraintVertical_bias="0.25" />
 
         <TextView
-            android:id="@+id/txtHeading"
+            android:id="@+id/txt_heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Enter your username"
-            android:textColor="#008069"
+            android:text="Profile Info"
+            android:textColor="@color/color_primary"
             android:textSize="28dp"
             android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgPhone" />
+            app:layout_constraintTop_toBottomOf="@+id/civ_profile" />
+
+        <TextView
+            android:id="@+id/txt_sub_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Please provide your name and an optional profile photo."
+            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_heading" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_username"
@@ -85,22 +99,22 @@
             android:backgroundTint="@color/color_primary"
             android:hint="Username"
             android:inputType="textPersonName"
-            app:layout_constraintVertical_bias="0.25"
             app:layout_constraintBottom_toTopOf="@+id/btn_go"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtHeading"
+            app:layout_constraintTop_toBottomOf="@+id/txt_sub_heading"
+            app:layout_constraintVertical_bias="0.25"
             tools:ignore="TouchTargetSizeCheck" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintVertical_bias="0.85"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_go"

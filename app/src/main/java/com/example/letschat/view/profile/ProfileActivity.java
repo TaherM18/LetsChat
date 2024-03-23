@@ -192,8 +192,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 currentUserModel = task.getResult().toObject(UserModel.class);
                 binding.etName.setText(currentUserModel.getUserName());
-                binding.etBio.setText(currentUserModel.getBio());
-                binding.etPhone.setText(currentUserModel.getUserPhone());
+//                binding.etBio.setText(currentUserModel.getBio());
+//                binding.etPhone.setText(currentUserModel.getUserPhone());
             }
         });
     }

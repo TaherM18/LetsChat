@@ -18,6 +18,7 @@ import com.example.letschat.R;
 import com.example.letschat.model.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -69,12 +70,7 @@ public class SetUserInfoActivity extends AppCompatActivity {
                     binding.etName.getText().toString(),
                     firebaseUser.getPhoneNumber(),
                     "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "");
+                    Timestamp.now());
             firestore.collection("Users").document(firebaseUser.getUid()).set(user)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

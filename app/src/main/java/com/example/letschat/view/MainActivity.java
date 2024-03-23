@@ -15,22 +15,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.letschat.R;
+import com.example.letschat.adapter.RecyclerChatsAdapter;
 import com.example.letschat.databinding.ActivityMainBinding;
 import com.example.letschat.menu.CallsFragment;
 import com.example.letschat.menu.ChatsFragment;
 import com.example.letschat.menu.StoriesFragment;
+import com.example.letschat.model.ChatModel;
+import com.example.letschat.model.UserModel;
+import com.example.letschat.utils.FirebaseUtil;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private FirebaseDatabase database;
+    private List<ChatModel> chatModelList;
+    private RecyclerChatsAdapter chatsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         setupWithViewPager(binding.viewPager);
@@ -92,13 +104,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int selectedId = item.getItemId();
-        if (selectedId == R.id.menu_search) {
+        if (selectedId == R.id.menu_camera) {
+            return true;
+        }
+        else if (selectedId == R.id.menu_search) {
             return true;
         }
         else if (selectedId == R.id.menu_group) {
@@ -124,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFabIcon(final int index) {
         binding.fabAction.hide();
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

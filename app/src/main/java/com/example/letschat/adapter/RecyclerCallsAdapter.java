@@ -60,15 +60,15 @@ public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdap
         setAnimation(holder.itemView, position);
 
         if (callModel.getCallType().equals("missed")) {
-            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.subdirectory_arrow_left_24));
+            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.call_received_24));
             holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_red_dark));
         }
         else if (callModel.getCallType().equals("incoming")) {
             holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.subdirectory_arrow_left_24));
             holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
         }
-        else {
-            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.arrow_outward_24));
+        else { // outgoing
+            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.call_made_24));
             holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
 
         }
