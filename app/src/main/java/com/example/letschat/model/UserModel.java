@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp;
 public class UserModel {
     private String userId;
     private String userName;
+    private String bio;
     private String phone;
     private String profileImage;
     private Timestamp createdTimestamp;
@@ -57,5 +58,17 @@ public class UserModel {
 
     public void setCreatedTimestamp(Timestamp createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", bio='" + bio + '\'' +
+                ", phone='" + phone + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", createdTimestamp=" + createdTimestamp +
+                '}';
     }
 }

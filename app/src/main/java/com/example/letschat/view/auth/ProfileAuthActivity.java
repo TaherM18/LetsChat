@@ -83,33 +83,16 @@ public class ProfileAuthActivity extends AppCompatActivity {
 
         UserModel userModel = new UserModel(userId, userName, phoneNumber, imageUrl, timeStamp);
 
-        FirebaseDatabase.getInstance().getReference()
-                .child(FirebaseUtil.collectionName)
-                .child(FirebaseUtil.currentUserId())
-                .setValue(userModel)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
-
-                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            AndroidUtil.showToast(getApplicationContext(), "Failed to set user data");
-                        }
-                    }
-                });
-
-//        FirebaseFirestore.getInstance().collection(FirebaseUtil.collectionName)
-//                .add(userModel)
-//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//        FirebaseDatabase.getInstance().getReference()
+//                .child(FirebaseUtil.collectionName)
+//                .child(FirebaseUtil.currentUserId())
+//                .setValue(userModel)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                    @Override
-//                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                    public void onComplete(@NonNull Task<Void> task) {
 //                        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
 //
-//                        if (task.isSuccessful()) {
+//                         if (task.isSuccessful()) {
 //                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 //                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                            startActivity(intent);
@@ -118,6 +101,23 @@ public class ProfileAuthActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
+
+        FirebaseFirestore.getInstance().collection(FirebaseUtil.collectionName).document(FirebaseUtil.currentUserId())
+                .set(userModel)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
+
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            AndroidUtil.showToast(getApplicationContext(), "Failed to set user data");
+                        }
+                    }
+                });
     }
 
     private void setUsername() {
@@ -128,7 +128,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
             return;
         }
         userModel = new UserModel();
-        FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseUtil.currentUserDocument().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
@@ -190,7 +190,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
 
     private void getUserData() {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
-        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        FirebaseUtil.currentUserDocument().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);

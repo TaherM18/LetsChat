@@ -33,13 +33,18 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
         binding.countryCodePicker.registerCarrierNumberEditText(binding.edtPhone);
 
-        binding.btnOtp.setOnClickListener(new View.OnClickListener() {
+        binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!binding.countryCodePicker.isValidFullNumber()) {
                     binding.edtPhone.setError("Invalid phone number");
                     return;
                 }
+
+//                if () {
+                    // TODO: search for a document containing given phone number
+                    //  if it is available then redirect to MainActivity
+//                }
                 Intent intent = new Intent(PhoneAuthActivity.this, OtpAuthActivity.class);
                 intent.putExtra("phone", binding.countryCodePicker.getFullNumberWithPlus());
                 startActivity(intent);

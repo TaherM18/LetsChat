@@ -26,6 +26,14 @@ public class AndroidUtil {
         }
     }
 
+    public static void setProgressBar(ProgressBar progressBar, boolean inProgress) {
+        if (inProgress) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
     public static String getFileExtension(Context context, Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();

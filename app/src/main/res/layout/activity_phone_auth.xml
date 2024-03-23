@@ -115,7 +115,7 @@
             android:hint="Phone Number"
             android:inputType="phone"
             app:layout_constraintVertical_bias="0.25"
-            app:layout_constraintBottom_toTopOf="@+id/btn_otp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/country_code_picker"
             app:layout_constraintTop_toBottomOf="@+id/txt_sub_heading"
@@ -132,7 +132,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_otp"
+            android:id="@+id/btn_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

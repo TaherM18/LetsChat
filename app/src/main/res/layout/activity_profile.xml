@@ -22,13 +22,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Profile"
-                app:titleTextColor="@color/white" />
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/arrow_back_24"
+                app:navigationIconTint="@color/white"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:transitionName="image"
             android:id="@+id/civ_profile"
+            android:transitionName="image"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_marginTop="24dp"
