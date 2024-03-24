@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter your name"
+        app:startIconDrawable="@drawable/edit_24"
+        app:startIconTint="@color/color_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,7 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        app:backgroundTint="@color/color_primary"
+        android:textColor="@color/color_primary"
+        android:textStyle="bold"
+        app:backgroundTint="@color/off_white"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/il_name" />
@@ -38,7 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        app:backgroundTint="@android:color/holo_red_light"
+        android:textColor="@color/color_primary"
+        android:textStyle="bold"
+        app:backgroundTint="@color/off_white"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_save"
         app:layout_constraintTop_toBottomOf="@+id/il_name" />

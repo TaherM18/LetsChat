@@ -60,6 +60,14 @@ public class UserModel {
         this.createdTimestamp = createdTimestamp;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +

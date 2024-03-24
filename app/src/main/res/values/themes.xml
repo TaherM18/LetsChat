@@ -13,5 +13,14 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Window Background -->
         <item name="android:windowBackground">@color/off_white</item>
+
+        <item name="toolbarStyle">@style/MyToolbar</item>
     </style>
+
+    <!-- Style for toolbar -->
+    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <!-- Customize text color for menu items -->
+        <item name="android:iconTint">@color/white</item>
+    </style>
+
 </resources>

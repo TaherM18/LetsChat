@@ -102,7 +102,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
 //                    }
 //                });
 
-        FirebaseFirestore.getInstance().collection(FirebaseUtil.collectionName).document(FirebaseUtil.currentUserId())
+        FirebaseUtil.currentUserDocument()
                 .set(userModel)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

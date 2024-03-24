@@ -53,7 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firestore;
-    private BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog profileImgPickerBottomSheetDialog;
+    private BottomSheetDialog userNameEditBottomSheetDialog;
     private Uri imageUri;
     private int IMAGE_GALLERY_REQUEST = 111;
     private UserModel userModel;
@@ -67,7 +68,8 @@ public class ProfileActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
         setSupportActionBar(binding.materialToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        bottomSheetDialog = new BottomSheetDialog(this);
+        profileImgPickerBottomSheetDialog = new BottomSheetDialog(this);
+        userNameEditBottomSheetDialog = new BottomSheetDialog(this);
 
         // Setup custom Actionbar
         setSupportActionBar(binding.materialToolbar);
@@ -91,23 +93,23 @@ public class ProfileActivity extends AppCompatActivity {
                 // cardGallery onClick Event Listener
                 view.findViewById(R.id.card_gallery).setOnClickListener((View v) -> {
                     openGallery();
-                    bottomSheetDialog.dismiss();
+                    profileImgPickerBottomSheetDialog.dismiss();
                 });
 
                 // cardCamera onClick Event Listener
                 view.findViewById(R.id.card_camera).setOnClickListener((View v) -> {
                     openCamera();
-                    bottomSheetDialog.dismiss();
+                    profileImgPickerBottomSheetDialog.dismiss();
                 });
 
                 // Set view for BottomSheetDialog and show it
-                bottomSheetDialog.setContentView(view);
-                bottomSheetDialog.show();
+                profileImgPickerBottomSheetDialog.setContentView(view);
+                profileImgPickerBottomSheetDialog.show();
 
-                bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                profileImgPickerBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        bottomSheetDialog = null;
+                        dialog.dismiss();
                     }
                 });
             }
@@ -118,38 +120,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.etName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View textInputLayoutView) {
-                View view = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_name, null);
-
-                TextInputEditText editTextName = view.findViewById(R.id.et_name);
-
-                // Save Button onClick Event Listener
-                view.findViewById(R.id.btn_save).setOnClickListener((View v) -> {
-                    if (!TextUtils.isEmpty(editTextName.getText().toString())) {
-                        editTextName.setError(null);
-                        updateName(editTextName.getText().toString());
-                        bottomSheetDialog.dismiss();
-                    }
-                    else {
-                        editTextName.setError("Name is required");
-                    }
-
-                });
-
-                // Cancel Button onClick Event Listener
-                view.findViewById(R.id.btn_cancel).setOnClickListener((View v) -> {
-                    bottomSheetDialog.dismiss();
-                });
-
-                // Set view for BottomSheetDialog and show it
-                bottomSheetDialog.setContentView(view);
-                bottomSheetDialog.show();
-
-                bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        bottomSheetDialog = null;
-                    }
-                });
+                showEditNameBottomSheetDialog();
             }
         });
 
@@ -196,8 +167,9 @@ public class ProfileActivity extends AppCompatActivity {
                 userModel = task.getResult().toObject(UserModel.class);
                 if (userModel != null) {
                     binding.etName.setText(userModel.getUserName());
-//                binding.etBio.setText(currentUserModel.getBio());
-                binding.etPhone.setText(userModel.getPhone());
+                    binding.etBio.setText(userModel.getBio());
+                    binding.etPhone.setText(userModel.getPhone());
+                    Glide.with(getApplicationContext()).load(userModel.getProfileImage()).into(binding.civProfile);
                 }
                 else {
                     AndroidUtil.showToast(getApplicationContext(), "userModel is empty");
@@ -224,59 +196,38 @@ public class ProfileActivity extends AppCompatActivity {
                 && data != null && data.getData() != null) {
 
             imageUri = data.getData();
-
-            uploadToFirebase(imageUri);
-
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                binding.civProfile.setImageBitmap(bitmap);
-//            } catch (Exception e) {
-//                Toast.makeText(this, "OnActivityResult: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
+            uploadToFirebaseStorage(imageUri);
         }
     }
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
+    private void uploadToFirebaseStorage(Uri imgUri) {
+        if (imgUri == null) {
+            AndroidUtil.showToast(getApplicationContext(), "imageUri is null");
+            return;
+        }
+        AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, true);
 
-    private void uploadToFirebase(Uri imageUri) {
-        if (imageUri != null) {
+        // Create a storage reference to "profile_images" folder
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference()
+                .child("profile_images")
+                .child(FirebaseUtil.currentUserId());
 
-            StorageReference riversRef = FirebaseStorage.getInstance().getReference()
-                    .child("profileImages/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
-            riversRef.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        storageRef.putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Image Upload Completed  Successfully
+                    AndroidUtil.showToast(ProfileActivity.this, "Image uploaded");
+                    storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isSuccessful());
-                            Uri downloadUri = uriTask.getResult();
-
-                            final String downloadUriString = String.valueOf(downloadUri);
-
-                            HashMap<String,Object> hashMap = new HashMap<>();
-                            hashMap.put("imageProfile", downloadUriString);
-
-                            firestore.collection("Users").document(firebaseUser.getUid()).update(hashMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            getUserData();
-                                            Toast.makeText(ProfileActivity.this, "Upload Success", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ProfileActivity.this, "Upload Failure: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onSuccess(Uri uri) {
+                            // Store the download URL in a Firestore document
+                            updateProfile(uri.toString());
                         }
                     });
-        }
+                }
+            }
+        });
     }
 
     private void updateName(String newName) {
@@ -285,9 +236,10 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, false);
                         if (task.isSuccessful()) {
                             AndroidUtil.showToast(ProfileActivity.this, "Name Updated");
-                            //getUserData();    // commented to improve performance
+                            // getUserData();    // commented to improve performance
                             binding.etName.setText(newName);
                         }
                         else {
@@ -297,8 +249,26 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateProfile(String profileImgUrl) {
+        FirebaseUtil.currentUserDocument().update("profileImage", profileImgUrl)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, false);
+
+                        if (task.isSuccessful()) {
+                            AndroidUtil.showToast(ProfileActivity.this, "Profile Image Updated");
+                            Glide.with(getApplicationContext()).load(profileImgUrl).into(binding.civProfile);
+                        }
+                        else {
+                            AndroidUtil.showToast(ProfileActivity.this, "Failed to Update Name:\n"+task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
     private void showDialogSignOut() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
         builder.setTitle("Signout Alert")
                 .setMessage("Are your sure you want to signout?")
                 .setIcon(R.drawable.warning_24)
@@ -319,5 +289,41 @@ public class ProfileActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showEditNameBottomSheetDialog() {
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_edit_name, null);
+
+        TextInputEditText editTextName = view.findViewById(R.id.et_name);
+        editTextName.setText(binding.etName.getText().toString());
+
+        // Save Button onClick Event Listener
+        view.findViewById(R.id.btn_save).setOnClickListener((View v) -> {
+            if ( editTextName.getText().toString().isEmpty() ) {
+                editTextName.setError("Name is required");
+            }
+            else {
+                editTextName.setError(null);
+                updateName(editTextName.getText().toString());
+                userNameEditBottomSheetDialog.dismiss();
+            }
+
+        });
+
+        // Cancel Button onClick Event Listener
+        view.findViewById(R.id.btn_cancel).setOnClickListener((View v) -> {
+            userNameEditBottomSheetDialog.dismiss();
+        });
+
+        // Set view for BottomSheetDialog and show it
+        userNameEditBottomSheetDialog.setContentView(view);
+        userNameEditBottomSheetDialog.show();
+
+        userNameEditBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });
     }
 }

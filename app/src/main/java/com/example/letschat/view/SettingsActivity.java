@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        firestore.collection(FirebaseUtil.collectionName).document(FirebaseUtil.currentUserId()).get()
+        FirebaseUtil.currentUserDocument().get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
