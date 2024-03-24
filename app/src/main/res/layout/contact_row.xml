@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="2dp"
-    app:cardCornerRadius="4dp"
-    app:cardUseCompatPadding="false"
-    app:cardBackgroundColor="@color/cardview_light_background">
+    app:cardCornerRadius="0dp"
+    app:cardUseCompatPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -15,50 +17,45 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/imgProfile"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/person_24"
-            android:background="@drawable/ic_launcher_background"
-            app:tint="#fece2f" />
+            android:src="@drawable/person_placeholder_360x360"/>
 
         <TextView
             android:id="@+id/txt_contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgProfile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            android:layout_marginLeft="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:fontFamily="@font/bungee"
             android:includeFontPadding="false"
             android:text="Name"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/civ_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0"/>
 
         <TextView
             android:id="@+id/txt_contact_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txt_contact_name"
-            app:layout_constraintStart_toEndOf="@id/imgProfile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:fontFamily="@font/antic"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:includeFontPadding="false"
-            android:text="0987654321"/>
+            android:text="0987654321"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/civ_profile"
+            app:layout_constraintTop_toBottomOf="@id/txt_contact_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
+
+</layout>

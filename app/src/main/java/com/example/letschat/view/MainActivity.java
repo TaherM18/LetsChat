@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerChatsAdapter;
@@ -23,6 +24,7 @@ import com.example.letschat.menu.StoriesFragment;
 import com.example.letschat.model.ChatModel;
 import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.FirebaseUtil;
+import com.example.letschat.view.contact.ContactsActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -43,13 +45,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialization
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
         setupWithViewPager(binding.viewPager);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
-
         setSupportActionBar(binding.materialToolbar);
 
+        // Floating Action Button onClick Listener
+        binding.fabAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ContactsActivity.class));
+            }
+        });
+
+        // ViewPager onPageChange Listener
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -145,6 +155,12 @@ public class MainActivity extends AppCompatActivity {
                 switch (index) {
                     case 0:
                         binding.fabAction.setImageDrawable(getDrawable(R.drawable.chat_24));
+                        binding.fabAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(MainActivity.this, ContactsActivity.class));
+                            }
+                        });
                         break;
                     case 1:
                         binding.fabAction.setImageDrawable(getDrawable(R.drawable.photo_camera_24));
