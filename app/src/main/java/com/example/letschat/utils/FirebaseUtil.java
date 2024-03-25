@@ -7,17 +7,25 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseUtil {
     public static String collectionName = "users";
+    public static String usersCollection = "users";
+    public static String chatroomsCollection = "chatrooms";
+
     public static String currentUserId() {
         return FirebaseAuth.getInstance().getUid();
     }
     public static DocumentReference currentUserDocument() {
         return FirebaseFirestore.getInstance().collection(collectionName).document(currentUserId());
+    }
+
+    public static CollectionReference allUserCollectionReference() {
+        return FirebaseFirestore.getInstance().collection(usersCollection);
     }
 
     public static boolean isLoggedIn() {
@@ -29,20 +37,20 @@ public class FirebaseUtil {
         }
     }
 
-//    public static UserModel getUserData() {
-//        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
-//        FirebaseUtil.currentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
-//                if (task.isSuccessful()) {
-//                    UserModel userModel = task.getResult().toObject(UserModel.class);
-//                    if (userModel != null) {
-//                        return userModel;
-//                    }
-//                }
-//                return null;
-//            }
-//        });
-//    }
+    public static DocumentReference getChatroomReference(String chatroomId) {
+        return FirebaseFirestore.getInstance().collection(chatroomsCollection).document(chatroomId);
+    }
+
+    public static String getChatroomId(String userId1, String userId2) {
+        if (userId1.hashCode() < userId2.hashCode()) {
+            return userId1+"_"+userId2;
+        }
+        else {
+            return userId2+"_"+userId1;
+        }
+    }
+
+    public static CollectionReference getChatroomMessageReference(String chatroomId) {
+        return getChatroomReference(chatroomId).collection("chats");
+    }
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.contact.ContactsActivity">
@@ -24,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Select Contact"
+                app:titleTextColor="@color/white"
                 app:navigationIcon="@drawable/arrow_back_24"
                 app:navigationIconTint="@color/white"/>
 
@@ -93,6 +93,15 @@
                 app:layout_constraintTop_toBottomOf="@id/btn_invite" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+            app:layout_constraintEnd_toEndOf="@+id/recycler_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

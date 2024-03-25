@@ -1,6 +1,7 @@
 package com.example.letschat.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.example.letschat.R;
 import com.example.letschat.databinding.ChatRowBinding;
 import com.example.letschat.model.ChatModel;
+import com.example.letschat.utils.AndroidUtil;
+import com.example.letschat.view.chat.ChatActivity;
 
 import java.util.List;
 
@@ -57,9 +60,10 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent chatIntent = new Intent(context, ChatActivity.class);
-//                chatIntent.putExtra("userId", chatModelList.get(position).getUsername());
-//                context.startActivity(chatIntent);
+//                Intent intent = new Intent(context, ChatActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                AndroidUtil.passUserModelAsIntent(intent, userModel);
+//                context.startActivity(intent);
             }
         });
 

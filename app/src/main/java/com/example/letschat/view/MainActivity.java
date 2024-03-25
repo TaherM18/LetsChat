@@ -25,6 +25,7 @@ import com.example.letschat.model.ChatModel;
 import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.FirebaseUtil;
 import com.example.letschat.view.contact.ContactsActivity;
+import com.example.letschat.view.contact.SearchContactActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else if (selectedId == R.id.menu_search) {
+            startActivity(new Intent(getApplicationContext(), SearchContactActivity.class));
             return true;
         }
         else if (selectedId == R.id.menu_group) {

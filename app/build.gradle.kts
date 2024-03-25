@@ -47,14 +47,13 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation("com.google.firebase:firebase-auth:22.3.1")
-    // Import the BoM for the Firebase platform
+    // BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+    // FirebaseUI for Cloud Firestore
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
     // Zoomage View
     implementation("com.jsibbold:zoomage:1.3.1")
     // Pin View
