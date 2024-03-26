@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.letschat.databinding.ActivityProfileAuthBinding;
 import com.example.letschat.view.MainActivity;
 import com.example.letschat.R;
@@ -41,9 +42,9 @@ public class ProfileAuthActivity extends AppCompatActivity {
 
     private ActivityProfileAuthBinding binding;
     private String phoneNumber;
-    private UserModel userModel;
+    private UserModel userModel = null;
     private int IMAGE_GALLERY_REQUEST = 111;
-    private Uri imageUri;
+    private Uri imageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
 
         phoneNumber = getIntent().getExtras().getString("phone");
+        getUserData();
 
         binding.civProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,29 +80,10 @@ public class ProfileAuthActivity extends AppCompatActivity {
     private void setUserData() {
         String userId = FirebaseAuth.getInstance().getUid();
         String userName = binding.edtUsername.getText().toString();
-        String imageUrl = imageUri.toString();
+        String profileImageUrl = imageUri.toString();
         Timestamp timeStamp = Timestamp.now();
 
-        UserModel userModel = new UserModel(userId, userName, phoneNumber, imageUrl, timeStamp);
-
-//        FirebaseDatabase.getInstance().getReference()
-//                .child(FirebaseUtil.collectionName)
-//                .child(FirebaseUtil.currentUserId())
-//                .setValue(userModel)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
-//
-//                         if (task.isSuccessful()) {
-//                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
-//                        } else {
-//                            AndroidUtil.showToast(getApplicationContext(), "Failed to set user data");
-//                        }
-//                    }
-//                });
+        UserModel userModel = new UserModel(userId, userName, phoneNumber, profileImageUrl, timeStamp);
 
         FirebaseUtil.currentUserDocument()
                 .set(userModel)
@@ -120,30 +103,6 @@ public class ProfileAuthActivity extends AppCompatActivity {
                 });
     }
 
-    private void setUsername() {
-        AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
-        String username = binding.edtUsername.getText().toString();
-        if (username.isEmpty()) {
-            binding.edtUsername.setError("Username is required");
-            return;
-        }
-        userModel = new UserModel();
-        FirebaseUtil.currentUserDocument().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, false);
-
-                if (task.isSuccessful()) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
-                    AndroidUtil.showToast(getApplicationContext(), "Failed to set user data");
-                }
-            }
-        });
-    }
-
     private void openGallery() {
         Intent iGallery = new Intent();
         iGallery.setType("image/*");
@@ -156,12 +115,20 @@ public class ProfileAuthActivity extends AppCompatActivity {
     }
 
     private void uploadToFirebaseStorage() {
-        if (imageUri == null) {
-            //Drawable personPlaceholder = getResources().getDrawable(R.drawable.person_placeholder_360x360);
-            AndroidUtil.showToast(getApplicationContext(), "imageUri is null");
-            return;
-        }
         AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
+
+        if (imageUri == null && userModel == null) {
+            // profile image is not picked and not loaded from firebase
+            int resourceId = R.drawable.person_placeholder_360x360;
+            imageUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
+        }
+        else if (imageUri == null && userModel != null) {
+            // profile image is not picked and already loaded from firebase
+            imageUri = Uri.parse(userModel.getProfileImage());
+        }
+        else {
+            // User has picked an image
+        }
 
         // Create a storage reference to "profile_images" folder
         StorageReference storageRef = FirebaseStorage.getInstance().getReference()
@@ -177,7 +144,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
                     storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            // String imageUrl = uri.toString();
+                            // set local uri to firebase uri
                             imageUri = uri;
                             // Store the download URL in a Firestore document
                             setUserData();
@@ -198,7 +165,9 @@ public class ProfileAuthActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     userModel = task.getResult().toObject(UserModel.class);
                     if (userModel != null) {
+                        // current user is present in firestore
                         binding.edtUsername.setText(userModel.getUserName());
+                        Glide.with(ProfileAuthActivity.this).load(userModel.getProfileImage()).into(binding.civProfile);
                     }
                 }
             }

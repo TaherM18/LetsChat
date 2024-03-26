@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -44,9 +46,6 @@ public class OtpAuthActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp_auth);
 
         phoneNumber = getIntent().getStringExtra("phone");
-
-//        Map<String, String> data = new HashMap<>();
-//        FirebaseFirestore.getInstance().collection("test").add(data);
 
         sendOtp(phoneNumber, false);
 
@@ -116,6 +115,7 @@ public class OtpAuthActivity extends AppCompatActivity {
         }
     }
 
+    // Sign in with the phone authentication credential
     private void signIn(PhoneAuthCredential phoneAuthCredential) {
         // login and go to next activity
         setInProgress(true);
@@ -124,6 +124,7 @@ public class OtpAuthActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 setInProgress(false);
                 if (task.isSuccessful()) {
+                    FirebaseUser user = task.getResult().getUser();
                     Intent intent = new Intent(getApplicationContext(), ProfileAuthActivity.class);
                     intent.putExtra("phone", phoneNumber);
                     startActivity(intent);

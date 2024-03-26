@@ -1,16 +1,28 @@
 package com.example.letschat.utils;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityOptionsCompat;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.letschat.common.Common;
 import com.example.letschat.model.UserModel;
+import com.example.letschat.view.display.ViewImageActivity;
+import com.example.letschat.view.profile.ProfileActivity;
 import com.google.android.material.button.MaterialButton;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AndroidUtil {
     public static void showToast(Context context, String message) {
@@ -56,5 +68,22 @@ public class AndroidUtil {
         userModel.setPhone(intent.getStringExtra("phone"));
         userModel.setProfileImage(intent.getStringExtra("profileImage"));
         return userModel;
+    }
+
+    public static void setImageWithGlide(Context context, Uri imageUri, CircleImageView circleImageView) {
+        Glide.with(context).load(imageUri).apply(RequestOptions.centerCropTransform()).into(circleImageView);
+    }
+
+    public static void transitToViewImage(Context context, CircleImageView circleImageView) {
+        circleImageView.invalidate();
+        Drawable drawable = circleImageView.getDrawable();
+        Common.IMAGE_BITMAP = ((BitmapDrawable)drawable.getCurrent()).getBitmap();
+        ActivityOptionsCompat activityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                        circleImageView, "image");
+
+        Intent intent = new Intent(context, ViewImageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        context.startActivity(intent, activityOptionsCompat.toBundle());
     }
 }

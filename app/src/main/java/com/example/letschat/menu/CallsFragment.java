@@ -3,6 +3,7 @@ package com.example.letschat.menu;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,10 +15,10 @@ import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerCallsAdapter;
 import com.example.letschat.adapter.RecyclerChatsAdapter;
 import com.example.letschat.model.CallModel;
-import com.example.letschat.model.ChatModel;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class CallsFragment extends Fragment {
 
@@ -44,6 +45,8 @@ public class CallsFragment extends Fragment {
         }
 
         recyclerCallsAdapter = new RecyclerCallsAdapter(getContext(), callModelList);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        recyclerCallsView.addItemDecoration(itemDecoration);
         recyclerCallsView.setAdapter(recyclerCallsAdapter);
 
         return view;

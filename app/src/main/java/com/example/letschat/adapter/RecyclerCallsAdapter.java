@@ -73,7 +73,7 @@ public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdap
 
         }
 
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Intent chatIntent = new Intent(context, ChatActivity.class);
@@ -108,8 +108,6 @@ public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdap
             imgArrow = itemView.findViewById(R.id.iv_arrow);
             imgBtnCall = itemView.findViewById(R.id.ib_call);
             txtTime = itemView.findViewById(R.id.tv_datetime);
-//            txtContact = itemView.findViewById(R.id.tv_contact);
-            constraintLayout = itemView.findViewById(R.id.constraint_layout);
         }
     }
 

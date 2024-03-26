@@ -12,7 +12,7 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_dark_background"
+            android:backgroundTint="@color/color_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -70,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/civ_profile">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_name"
+                android:id="@+id/edt_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Taher.M"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toBottomOf="@id/il_name">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_bio"
+                android:id="@+id/edt_bio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Hey there! I'm using LetsChat"
@@ -119,7 +119,7 @@
             app:startIconDrawable="@drawable/phone_24">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_phone"
+                android:id="@+id/edt_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="+91 7818038934"

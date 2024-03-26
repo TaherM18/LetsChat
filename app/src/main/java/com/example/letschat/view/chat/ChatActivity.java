@@ -43,11 +43,13 @@ public class ChatActivity extends AppCompatActivity {
 
         // Initialization
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
-        setSupportActionBar(binding.materialToolbar);
         otherUser = AndroidUtil.getUserModelFromIntent(getIntent());
+        chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(), otherUser.getUserId());
+
+        // Set Custom Toolbar
+        setSupportActionBar(binding.materialToolbar);
         getSupportActionBar().setTitle(otherUser.getUserName());
         getSupportActionBar().setHomeButtonEnabled(true);
-        chatroomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(), otherUser.getUserId());
 
         // TODO: setProfileImage in toolbar
         // Glide.with(this).load(profileImage).into();
@@ -117,12 +119,15 @@ public class ChatActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
                 .setQuery(query, MessageModel.class).build();
 
-        messageAdapter = new RecyclerMessageAdapter(options, getApplicationContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+
+        messageAdapter = new RecyclerMessageAdapter(options, getApplicationContext());
+
+        binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(messageAdapter);
         messageAdapter.startListening();
+
         messageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -135,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessageToUser(String message) {
         chatroomModel.setLastMessageTimestamp(Timestamp.now());
         chatroomModel.setLastMessageSenderId(FirebaseUtil.currentUserId());
+        chatroomModel.setLastMessage(message);
 
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
         MessageModel messageModel = new MessageModel(message, FirebaseUtil.currentUserId(), Timestamp.now());

@@ -6,9 +6,10 @@ import java.util.List;
 
 public class ChatroomModel {
     private String chatRoomId;
-    List<String> userIds;
-    Timestamp lastMessageTimestamp;
-    String lastMessageSenderId;
+    private List<String> userIds;
+    private Timestamp lastMessageTimestamp;
+    private String lastMessageSenderId;
+    private String lastMessage;
 
     public ChatroomModel() {
     }
@@ -50,5 +51,13 @@ public class ChatroomModel {
 
     public void setLastMessageSenderId(String lastMessageSenderId) {
         this.lastMessageSenderId = lastMessageSenderId;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }

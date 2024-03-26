@@ -44,10 +44,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // Circle Image View
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
+    // Firebase Authentication
     implementation("com.google.firebase:firebase-auth:22.3.1")
-    // BoM for the Firebase platform
+    // BoM for Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
@@ -60,6 +61,8 @@ dependencies {
     implementation("io.github.chaosleung:pinview:1.4.4")
     // Country Code Picker
     implementation("com.hbb20:ccp:2.5.0")
+    // Image Picker
+    implementation("com.github.dhaval2404:imagepicker:2.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

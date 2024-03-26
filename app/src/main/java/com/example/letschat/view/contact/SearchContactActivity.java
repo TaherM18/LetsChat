@@ -2,6 +2,7 @@ package com.example.letschat.view.contact;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -48,7 +49,12 @@ public class SearchContactActivity extends AppCompatActivity {
         searchUserAdapter = new RecyclerSearchUserAdapter(options, getApplicationContext());
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
+        binding.recyclerView.addItemDecoration(itemDecoration);
+
         binding.recyclerView.setAdapter(searchUserAdapter);
+
         searchUserAdapter.startListening();
     }
 

@@ -7,13 +7,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_profile"
+            android:transitionName="image"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/person_placeholder_360x360"
@@ -25,54 +23,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            tools:text="Vedant Patel"
-            android:textColor="@color/material_on_surface_emphasis_high_type"
+            tools:text="BAITE - AMMI"
+            android:textColor="@color/design_default_color_on_secondary"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toStartOf="@+id/ib_call"
+            app:layout_constraintEnd_toStartOf="@+id/tv_datetime"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/civ_profile"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:background="@android:color/transparent"
-            tools:src="@drawable/call_received_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/civ_profile"
-            app:layout_constraintTop_toBottomOf="@id/tv_username"
-            app:tint="@android:color/holo_red_dark" />
-
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_datetime"
+            android:id="@+id/tv_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="March 10, 10:27 PM"
-            android:textColor="@color/material_on_surface_emphasis_high_type"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:text="Farru: Ringz app to watch movies for f..."
+            android:textColor="@color/design_default_color_on_secondary"
             android:textSize="14sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ib_call"
-            app:layout_constraintStart_toEndOf="@id/iv_arrow"
+            app:layout_constraintEnd_toStartOf="@+id/tv_message_count"
+            app:layout_constraintStart_toEndOf="@id/civ_profile"
             app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
-        <ImageButton
-            android:id="@+id/ib_call"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_datetime"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="phone icon"
-            android:padding="8dp"
-            android:src="@drawable/call_24"
+            android:layout_height="wrap_content"
+            tools:text="11:48 PM"
+            android:textColor="@color/color_primary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_message_count"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/circle_24"
+            android:backgroundTint="@color/color_primary"
+            android:gravity="center"
+            tools:text="11"
+            android:textColor="@color/white"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/color_primary"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@id/tv_datetime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

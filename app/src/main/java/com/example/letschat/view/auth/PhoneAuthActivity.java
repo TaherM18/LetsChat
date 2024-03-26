@@ -1,5 +1,6 @@
 package com.example.letschat.view.auth;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -9,8 +10,23 @@ import android.view.View;
 
 import com.example.letschat.R;
 import com.example.letschat.databinding.ActivityPhoneAuthBinding;
+import com.example.letschat.model.UserModel;
+import com.example.letschat.utils.FirebaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.concurrent.TimeUnit;
 
 public class PhoneAuthActivity extends AppCompatActivity {
 
@@ -41,10 +57,24 @@ public class PhoneAuthActivity extends AppCompatActivity {
                     return;
                 }
 
-//                if () {
-                    // TODO: search for a document containing given phone number
-                    //  if it is available then redirect to MainActivity
-//                }
+//                FirebaseUtil.allUserCollectionReference().get()
+//                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    QuerySnapshot querySnapshot = task.getResult();
+//
+//                                    for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
+//                                        UserModel userModel = documentSnapshot.toObject(UserModel.class);
+//
+//                                        if (binding.edtPhone.getText().toString().equals(userModel.getPhone())) {
+//                                            // what to do now
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        });
+
                 Intent intent = new Intent(PhoneAuthActivity.this, OtpAuthActivity.class);
                 intent.putExtra("phone", binding.countryCodePicker.getFullNumberWithPlus());
                 startActivity(intent);

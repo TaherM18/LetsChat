@@ -3,6 +3,7 @@ package com.example.letschat.view.contact;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -77,7 +78,12 @@ public class ContactsActivity extends AppCompatActivity {
 //                        return;
 //                    }
                     contactsAdapter = new RecyclerContactsAdapter(ContactsActivity.this, userModelList);
+
                     binding.recyclerView.setLayoutManager(new LinearLayoutManager(ContactsActivity.this));
+
+                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL);
+                    binding.recyclerView.addItemDecoration(itemDecoration);
+
                     binding.recyclerView.setAdapter(contactsAdapter);
                 }
             }

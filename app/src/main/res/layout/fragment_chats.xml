@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
-            tools:listitem="@layout/chat_row"
+            tools:listitem="@layout/recent_chat_row"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.letschat.R;
+import com.example.letschat.databinding.ChatMessageRecyclerRowBinding;
 import com.example.letschat.databinding.ChatMessageRowBinding;
 import com.example.letschat.model.ChatModel;
 import com.example.letschat.model.MessageModel;
@@ -41,7 +42,7 @@ public class RecyclerMessageAdapter extends FirestoreRecyclerAdapter<MessageMode
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.chat_message_row, parent, false);
+        View view = layoutInflater.inflate(R.layout.chat_message_recycler_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,28 +50,29 @@ public class RecyclerMessageAdapter extends FirestoreRecyclerAdapter<MessageMode
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull MessageModel model) {
         if (model.getSenderId().equals(FirebaseUtil.currentUserId())) {
             // Current User's Message
-            holder.binding.cardLeftMessage.setVisibility(View.GONE);
-            holder.binding.cardRightMessage.setVisibility(View.VISIBLE);
-            holder.binding.txtRightMessage.setText(model.getMessage());
-            holder.binding.txtRightTime.setText(model.getTimestamp().toString());
+            holder.binding.cardLeftChat.setVisibility(View.GONE);
+            holder.binding.cardRightChat.setVisibility(View.VISIBLE);
+            holder.binding.txtRightChat.setText(model.getMessage());
+            holder.binding.txtRightTime.setText( FirebaseUtil.formatTimestamp(model.getTimestamp()) );
         }
         else {
             // Other User's Message
-            holder.binding.cardRightMessage.setVisibility(View.GONE);
-            holder.binding.cardLeftMessage.setVisibility(View.VISIBLE);
-            holder.binding.txtLeftMessage.setText(model.getMessage());
-            holder.binding.txtLeftTime.setText(model.getTimestamp().toString());
+            holder.binding.cardRightChat.setVisibility(View.GONE);
+            holder.binding.cardLeftChat.setVisibility(View.VISIBLE);
+            holder.binding.txtLeftChat.setText(model.getMessage());
+            holder.binding.txtLeftTime.setText( FirebaseUtil.formatTimestamp(model.getTimestamp()) );
+
         }
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ChatMessageRowBinding binding;
+         ChatMessageRecyclerRowBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            binding = ChatMessageRowBinding.bind(itemView);
+            binding = ChatMessageRecyclerRowBinding.bind(itemView);
         }
     }
 

@@ -7,33 +7,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.letschat.R;
-import com.example.letschat.databinding.ChatRowBinding;
-import com.example.letschat.model.ChatModel;
+import com.example.letschat.databinding.RecentChatRowBinding;
+import com.example.letschat.model.ChatroomModel;
+import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.AndroidUtil;
+import com.example.letschat.utils.FirebaseUtil;
 import com.example.letschat.view.chat.ChatActivity;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdapter.ViewHolder> {
+public class RecyclerChatsAdapter extends FirestoreRecyclerAdapter<ChatroomModel, RecyclerChatsAdapter.ViewHolder> {
 
     private Context context;
-    private List<ChatModel> chatModelList;
     private LayoutInflater layoutInflater;
     private int lastPosition = -1;
 
-    public RecyclerChatsAdapter(Context context, List<ChatModel> chatModelList) {
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public RecyclerChatsAdapter(@NonNull FirestoreRecyclerOptions<ChatroomModel> options, Context context) {
+        super(options);
         this.context = context;
-        this.chatModelList = chatModelList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -41,64 +49,75 @@ public class RecyclerChatsAdapter extends RecyclerView.Adapter<RecyclerChatsAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.chat_row, parent, false);
+        View view = layoutInflater.inflate(R.layout.recent_chat_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ChatModel chatModel = chatModelList.get(position);
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull ChatroomModel model) {
+        FirebaseUtil.getOtherUserFromChatroom(model.getUserIds()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        UserModel otherUserModel = task.getResult().toObject(UserModel.class);
 
-        Glide.with(context).load(chatModel.getProfileUrl()).into(holder.binding.civProfile);
-        holder.binding.tvUsername.setText(chatModel.getUsername());
-        holder.binding.tvMessage.setText(chatModel.getMessage());
-        holder.binding.tvDatetime.setText(chatModel.getDateTime());
-        holder.binding.tvMessageCount.setText(chatModel.getMessageCount());
+                        boolean messageSentByMe = model.getLastMessageSenderId().equals(FirebaseUtil.currentUserId());
 
-        setAnimation(holder.itemView, position);
+                        if ( messageSentByMe ) {
+                            holder.binding.tvMessage.setText("You: "+model.getLastMessage());
+                        }
+                        else {
+                            holder.binding.tvMessage.setText(model.getLastMessage());
+                        }
+                        Glide.with(context).load(otherUserModel.getProfileImage()).into(holder.binding.civProfile);
+                        holder.binding.tvUsername.setText(otherUserModel.getUserName());
+                        holder.binding.tvDatetime.setText(FirebaseUtil.formatTimestamp(model.getLastMessageTimestamp()));
+                        //holder.binding.tvMessageCount.setText(model.getMessageCount());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(context, ChatActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                AndroidUtil.passUserModelAsIntent(intent, userModel);
-//                context.startActivity(intent);
-            }
-        });
+                        holder.binding.civProfile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AndroidUtil.transitToViewImage(context, holder.binding.civProfile);
+                            }
+                        });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return true;
-            }
-        });
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, ChatActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                AndroidUtil.passUserModelAsIntent(intent, otherUserModel);
+                                context.startActivity(intent);
+                            }
+                        });
+
+                        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                return true;
+                            }
+                        });
+
+                        setAnimation(holder.itemView);
+                    }
+                }
+            });
     }
-
-    @Override
-    public int getItemCount() {
-        return chatModelList.size();
-    }
-
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ChatRowBinding binding;
+        RecentChatRowBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            binding = ChatRowBinding.bind(itemView);
+            binding = RecentChatRowBinding.bind(itemView);
         }
     }
 
-    private void setAnimation(View view, int position) {
-//        if (position > lastPosition) {
-//            lastPosition = position;
-            Animation slideInLeft = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
-//            Animation slideInLeft = AnimationUtils.loadAnimation(context, R.anim.recycler_anim);
-            view.startAnimation(slideInLeft);
-//        }
+    private void setAnimation(View view) {
+        Animation slideInLeft = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+        view.startAnimation(slideInLeft);
     }
 }

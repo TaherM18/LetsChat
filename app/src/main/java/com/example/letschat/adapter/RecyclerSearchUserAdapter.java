@@ -14,6 +14,7 @@ import com.example.letschat.R;
 import com.example.letschat.databinding.ContactRowBinding;
 import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.AndroidUtil;
+import com.example.letschat.utils.FirebaseUtil;
 import com.example.letschat.view.chat.ChatActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -31,7 +32,12 @@ public class RecyclerSearchUserAdapter extends FirestoreRecyclerAdapter<UserMode
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull UserModel model) {
-        holder.binding.txtContactName.setText(model.getUserName());
+        if (model.getUserName().equals(FirebaseUtil.currentUserId())) {
+            holder.binding.txtContactName.setText(model.getUserName() + " (Me)");
+        }
+        else {
+            holder.binding.txtContactName.setText(model.getUserName());
+        }
         holder.binding.txtContactNumber.setText(model.getPhone());
         Glide.with(context).load(model.getProfileImage()).into(holder.binding.civProfile);
 
