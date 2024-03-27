@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +27,13 @@ import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.FirebaseUtil;
 import com.example.letschat.view.contact.ContactsActivity;
 import com.example.letschat.view.contact.SearchContactActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setupWithViewPager(binding.viewPager);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
         setSupportActionBar(binding.materialToolbar);
+        getFCMToken();
 
         // Floating Action Button onClick Listener
         binding.fabAction.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +115,18 @@ public class MainActivity extends AppCompatActivity {
         public void addFragment(Fragment fragment, String title) {
             fragmentList.add(fragment);fragmentTitleList.add(title);
         }
+    }
+
+    private void getFCMToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    String token = task.getResult();
+                    FirebaseUtil.currentUserDocument().update("fcmToken", token);
+                }
+            }
+        });
     }
 
     @Override

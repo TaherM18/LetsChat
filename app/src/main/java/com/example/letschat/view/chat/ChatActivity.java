@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerMessageAdapter;
@@ -27,7 +28,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Arrays;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -151,8 +163,66 @@ public class ChatActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             binding.edtMessage.setText("");
+                            sendNotification(message);
                         }
                     }
                 });
+    }
+
+    private void sendNotification(String message) {
+        // current userName, message, currentUserId, otherUserToken
+        FirebaseUtil.currentUserDocument().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    UserModel currentUser = task.getResult().toObject(UserModel.class);
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+
+                        JSONObject notificationObject = new JSONObject();
+                        notificationObject.put("title", currentUser.getUserName());
+                        notificationObject.put("body", message);
+
+                        JSONObject dataObject = new JSONObject();
+                        dataObject.put("userId", currentUser.getUserId());
+
+                        jsonObject.put("notification", notificationObject);
+                        jsonObject.put("data", dataObject);
+                        jsonObject.put("to", otherUser.getFcmToken());
+
+                        callAPI(jsonObject);
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(ChatActivity.this,
+                                "Failed to send notification:\n"+e.getMessage(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void callAPI(JSONObject jsonObject) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String url = "https:fcm.googleapis.com/fcm/send";
+        RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("Authorization", "Bearer AAAA8ESPmKw:APA91bEORDRgKjGUD76_18JwjcBj11mQ3De36bsAb15h5-qIB0i6HiL9Qa9fPM1Fd26bYLhGWVxzcbAY_3nVGEHEzFQOPxuOQPx9GvuAbjZH8DuhKVPW0yuDsVZu-68jowP2KuxHftAr")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Toast.makeText(ChatActivity.this, "Failed to make API call:\n"+e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+            }
+        });
     }
 }

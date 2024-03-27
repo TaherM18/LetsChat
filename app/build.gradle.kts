@@ -55,6 +55,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     // FirebaseUI for Cloud Firestore
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
+    // Firebase Cloud Messaging
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
     // Zoomage View
     implementation("com.jsibbold:zoomage:1.3.1")
     // Pin View
@@ -63,6 +65,11 @@ dependencies {
     implementation("com.hbb20:ccp:2.5.0")
     // Image Picker
     implementation("com.github.dhaval2404:imagepicker:2.1")
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

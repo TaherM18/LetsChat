@@ -59,6 +59,7 @@ public class AndroidUtil {
         intent.putExtra("userName", userModel.getUserName());
         intent.putExtra("phone", userModel.getPhone());
         intent.putExtra("profileImage", userModel.getProfileImage());
+        intent.putExtra("fcmToken", userModel.getFcmToken());
     }
 
     public static UserModel getUserModelFromIntent(Intent intent) {
@@ -67,6 +68,7 @@ public class AndroidUtil {
         userModel.setUserName(intent.getStringExtra("userName"));
         userModel.setPhone(intent.getStringExtra("phone"));
         userModel.setProfileImage(intent.getStringExtra("profileImage"));
+        userModel.setFcmToken(intent.getStringExtra("fcmToken"));
         return userModel;
     }
 

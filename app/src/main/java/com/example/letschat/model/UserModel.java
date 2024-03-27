@@ -9,6 +9,7 @@ public class UserModel {
     private String phone;
     private String profileImage;
     private Timestamp createdTimestamp;
+    private String fcmToken;
 
     public UserModel() {}
 
@@ -68,6 +69,15 @@ public class UserModel {
         this.bio = bio;
     }
 
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
+
     @Override
     public String toString() {
         return "UserModel{" +
@@ -76,6 +86,7 @@ public class UserModel {
                 ", bio='" + bio + '\'' +
                 ", phone='" + phone + '\'' +
                 ", profileImage='" + profileImage + '\'' +
+                ", fcmToken='" + fcmToken + '\'' +
                 ", createdTimestamp=" + createdTimestamp +
                 '}';
     }
