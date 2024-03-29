@@ -67,7 +67,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="phone icon"
             android:padding="8dp"
-            android:src="@drawable/call_24"
+            android:src="@drawable/phone_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
