@@ -117,17 +117,13 @@ public class ProfileAuthActivity extends AppCompatActivity {
     private void uploadToFirebaseStorage() {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
 
-        if (imageUri == null && userModel == null) {
+        if (imageUri == null) {
             // profile image is not picked and not loaded from firebase
             int resourceId = R.drawable.person_placeholder_360x360;
             imageUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
         }
-        else if (imageUri == null && userModel != null) {
-            // profile image is not picked and already loaded from firebase
-            imageUri = Uri.parse(userModel.getProfileImage());
-        }
         else {
-            // User has picked an image
+            // profile image picked or set from firebase
         }
 
         // Create a storage reference to "profile_images" folder
@@ -144,7 +140,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
                     storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            // set local uri to firebase uri
+                            // set selected uri to firebase uri
                             imageUri = uri;
                             // Store the download URL in a Firestore document
                             setUserData();
@@ -164,10 +160,15 @@ public class ProfileAuthActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     userModel = task.getResult().toObject(UserModel.class);
+
                     if (userModel != null) {
                         // current user is present in firestore
                         binding.edtUsername.setText(userModel.getUserName());
-                        Glide.with(ProfileAuthActivity.this).load(userModel.getProfileImage()).into(binding.civProfile);
+
+                        if ( ! userModel.getProfileImage().isEmpty() ) {
+                            Glide.with(ProfileAuthActivity.this).load(userModel.getProfileImage()).into(binding.civProfile);
+                            imageUri = Uri.parse(userModel.getProfileImage());
+                        }
                     }
                 }
             }

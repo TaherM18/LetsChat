@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 
 import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerChatsAdapter;
+import com.example.letschat.adapter.ViewPagerStateAdapter;
 import com.example.letschat.databinding.ActivityMainBinding;
 import com.example.letschat.menu.CallsFragment;
 import com.example.letschat.menu.ChatsFragment;
@@ -29,6 +31,8 @@ import com.example.letschat.view.contact.ContactsActivity;
 import com.example.letschat.view.contact.SearchContactActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,9 +46,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseDatabase database;
-    private List<ChatModel> chatModelList;
-    private RecyclerChatsAdapter chatsAdapter;
+    private ViewPager2.OnPageChangeCallback onPageChangeCallback;
+    private TabLayoutMediator tabLayoutMediator;
+    private ViewPagerStateAdapter viewPagerStateAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +57,33 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialization
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        setupWithViewPager(binding.viewPager);
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
         setSupportActionBar(binding.materialToolbar);
-        getFCMToken();
+        viewPagerStateAdapter = new ViewPagerStateAdapter(MainActivity.this);
+
+        // Setup adapter for ViewPager2
+        binding.viewPager2.setAdapter(viewPagerStateAdapter);
+
+        // Setup mediator between TabLayout and ViewPager2
+        tabLayoutMediator = new TabLayoutMediator(binding.tabLayout, binding.viewPager2,
+                new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        switch (position) {
+                            case 0:
+                                tab.setText("Chats");
+                                break;
+                            case 1:
+                                tab.setText("Status");
+                                break;
+                            case 2:
+                                tab.setText("Calls");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+        tabLayoutMediator.attach();
 
         // Floating Action Button onClick Listener
         binding.fabAction.setOnClickListener(new View.OnClickListener() {
@@ -65,56 +93,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ViewPager onPageChange Listener
-        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        // ViewPager2 onPageChange Listener
+        binding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // This method will be called when a new page is selected
                 changeFabIcon(position);
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
         });
+
+        getFCMToken();
     }
 
-    private void setupWithViewPager(ViewPager viewPager) {
-        MainActivity.SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ChatsFragment(), "Chats");
-        adapter.addFragment(new StoriesFragment(), "Stories");
-        adapter.addFragment(new CallsFragment(), "Calls");
-        viewPager.setAdapter(adapter);
-    }
 
-    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> fragmentList = new ArrayList<>();
-        private final List<String> fragmentTitleList = new ArrayList<>();
-
-        public SectionsPagerAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            fragmentList.add(fragment);fragmentTitleList.add(title);
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+         binding.viewPager2.unregisterOnPageChangeCallback(onPageChangeCallback);
+         tabLayoutMediator.detach();
     }
 
     private void getFCMToken() {
@@ -140,28 +137,21 @@ public class MainActivity extends AppCompatActivity {
         int selectedId = item.getItemId();
         if (selectedId == R.id.menu_camera) {
             return true;
-        }
-        else if (selectedId == R.id.menu_search) {
+        } else if (selectedId == R.id.menu_search) {
             startActivity(new Intent(getApplicationContext(), SearchContactActivity.class));
             return true;
-        }
-        else if (selectedId == R.id.menu_group) {
+        } else if (selectedId == R.id.menu_group) {
             return true;
-        }
-        else if (selectedId == R.id.menu_broadcast) {
+        } else if (selectedId == R.id.menu_broadcast) {
             return true;
-        }
-        else if (selectedId == R.id.menu_web) {
+        } else if (selectedId == R.id.menu_web) {
             return true;
-        }
-        else if (selectedId == R.id.menu_starred_msg) {
+        } else if (selectedId == R.id.menu_starred_msg) {
             return true;
-        }
-        else if (selectedId == R.id.menu_settings) {
+        } else if (selectedId == R.id.menu_settings) {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
-        }
-        else {
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
@@ -191,6 +181,5 @@ public class MainActivity extends AppCompatActivity {
                 binding.fabAction.show();
             }
         }, 400);
-
     }
 }

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Light Theme. -->
-    <style name="Theme.LetsChat" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.LetsChat" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryVariant">@color/color_primary</item>
@@ -14,7 +14,6 @@
         <!-- Window Background -->
         <item name="android:windowBackground">@color/off_white</item>
 
-        <item name="toolbarStyle">@style/MyToolbar</item>
     </style>
 
     <!-- Style for toolbar -->

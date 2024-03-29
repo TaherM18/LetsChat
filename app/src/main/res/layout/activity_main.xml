@@ -33,11 +33,10 @@
             android:layout_height="wrap_content"
             app:tabBackground="@color/color_primary"
             app:tabGravity="fill"
-            app:tabIndicator="@color/color_primary"
-            app:tabIndicatorHeight="2dp"
+            app:tabMode="fixed"
             app:tabIndicatorColor="@color/white"
-            app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appbar_layout">
@@ -59,8 +58,8 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/tab_layout"

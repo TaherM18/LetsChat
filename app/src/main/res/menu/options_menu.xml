@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/menu_camera"
-        android:title="Camera"
         android:icon="@drawable/photo_camera_24"
-        android:iconTint="@color/cardview_light_background"
-        app:showAsAction="always"/>
+        android:iconTint="@color/white"
+        android:title="Camera"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/search_24"
@@ -15,37 +15,45 @@
         android:title="Search"
         app:showAsAction="always" />
 
-<!--    <group-->
-<!--        android:id="@+id/menu_more">-->
-        <item
-            android:id="@+id/menu_group"
-            android:icon="@drawable/group_add_24"
-            android:iconTint="@color/white"
-            android:title="New Group" />
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/more_vert_24"
+        android:iconTint="@color/white"
+        android:title="More"
+        app:showAsAction="always">
 
-        <item
-            android:id="@+id/menu_broadcast"
-            android:icon="@drawable/broadcast_on_home_24"
-            android:iconTint="@color/white"
-            android:title="New Broadcast" />
+        <menu>
+            <item
+                android:id="@+id/menu_group"
+                android:icon="@drawable/group_add_24"
+                android:iconTint="?attr/colorOnSecondary"
+                android:title="New Group" />
 
-        <item
-            android:id="@+id/menu_web"
-            android:icon="@drawable/web_24"
-            android:iconTint="@color/white"
-            android:title="LetsChat Web" />
+            <item
+                android:id="@+id/menu_broadcast"
+                android:icon="@drawable/broadcast_on_home_24"
+                android:iconTint="?attr/colorOnSecondary"
+                android:title="New Broadcast" />
 
-        <item
-            android:id="@+id/menu_starred_msg"
-            android:icon="@drawable/star_24"
-            android:iconTint="@color/white"
-            android:title="Starred Messages" />
+            <item
+                android:id="@+id/menu_web"
+                android:icon="@drawable/web_24"
+                android:iconTint="?attr/colorOnSecondary"
+                android:title="LetsChat Web" />
 
-        <item
-            android:id="@+id/menu_settings"
-            android:icon="@drawable/settings_24"
-            android:iconTint="@color/black"
-            android:title="Settings" />
-<!--    </group>-->
+            <item
+                android:id="@+id/menu_starred_msg"
+                android:icon="@drawable/star_24"
+                android:iconTint="?attr/colorOnSecondary"
+                android:title="Starred Messages" />
+
+            <item
+                android:id="@+id/menu_settings"
+                android:icon="@drawable/settings_24"
+                android:iconTint="?attr/colorOnSecondary"
+                android:title="Settings" />
+        </menu>
+
+    </item>
 
 </menu>

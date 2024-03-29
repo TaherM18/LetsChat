@@ -82,4 +82,6 @@ public class SearchContactActivity extends AppCompatActivity {
             searchUserAdapter.startListening();
         }
     }
+
+
 }

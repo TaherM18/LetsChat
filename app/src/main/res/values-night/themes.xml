@@ -14,7 +14,6 @@
         <!-- Window Background -->
         <item name="android:windowBackground">@color/off_white</item>
 
-        <item name="toolbarStyle">@style/MyToolbar</item>
     </style>
 
     <!-- Style for toolbar -->
