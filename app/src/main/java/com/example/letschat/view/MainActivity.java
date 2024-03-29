@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                         binding.fabAction.setImageDrawable(getDrawable(R.drawable.photo_camera_24));
                         break;
                     case 2:
-                        binding.fabAction.setImageDrawable(getDrawable(R.drawable.call_24));
+                        binding.fabAction.setImageDrawable(getDrawable(R.drawable.phone_24));
                         break;
                 }
                 binding.fabAction.show();
