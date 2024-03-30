@@ -9,14 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerChatsAdapter;
-import com.example.letschat.adapter.RecyclerSearchUserAdapter;
 import com.example.letschat.model.ChatModel;
 import com.example.letschat.model.ChatroomModel;
-import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
@@ -43,7 +40,7 @@ public class ChatsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
         recyclerChatsView = view.findViewById(R.id.recyclerChatsView);
-        recyclerChatsView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerChatsView.setLayoutManager( new LinearLayoutManager(getContext()) );
 
         setupChatsRecyclerView();
 

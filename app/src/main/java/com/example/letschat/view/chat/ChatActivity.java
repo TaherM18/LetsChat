@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -68,6 +69,9 @@ public class ChatActivity extends AppCompatActivity {
 
         getOrCreateChatroomModel();
         setupMessageRecyclerView();
+
+        // Register the RecyclerView for the context menu
+        registerForContextMenu(binding.recyclerView);
 
         binding.edtMessage.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,7 +138,7 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
 
-        messageAdapter = new RecyclerMessageAdapter(options, getApplicationContext());
+        messageAdapter = new RecyclerMessageAdapter(options, getApplicationContext(), chatroomId);
 
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(messageAdapter);
@@ -156,6 +160,7 @@ public class ChatActivity extends AppCompatActivity {
 
         FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
         MessageModel messageModel = new MessageModel(message, FirebaseUtil.currentUserId(), Timestamp.now());
+        messageModel.setReaction(-1);
 
         FirebaseUtil.getChatroomMessageReference(chatroomId).add(messageModel)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -164,6 +169,19 @@ public class ChatActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             binding.edtMessage.setText("");
                             sendNotification(message);
+
+                            String newDocumentId = task.getResult().getId();
+                            FirebaseUtil.getChatroomMessageReference(chatroomId).document(newDocumentId)
+                                    .update("messageId", newDocumentId)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(ChatActivity.this, "id updated", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
                         }
                     }
                 });
@@ -225,4 +243,13 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public boolean onContextItemSelected(@NonNull MenuItem item) {
+//        int selectedItemId = item.getItemId();
+//        if (selectedItemId == R.id.menu_like) {
+//
+//        }
+//        return super.onContextItemSelected(item);
+//    }
 }

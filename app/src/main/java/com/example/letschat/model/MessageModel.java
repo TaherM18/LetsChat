@@ -3,9 +3,11 @@ package com.example.letschat.model;
 import com.google.firebase.Timestamp;
 
 public class MessageModel {
+    private String messageId;
     private String message;
     private String senderId;
     private Timestamp timestamp;
+    private int reaction;
 
     public MessageModel() {
     }
@@ -38,5 +40,21 @@ public class MessageModel {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(int reaction) {
+        this.reaction = reaction;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 }

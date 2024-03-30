@@ -70,7 +70,9 @@ public class RecyclerChatsAdapter extends FirestoreRecyclerAdapter<ChatroomModel
                         else {
                             holder.binding.tvMessage.setText(model.getLastMessage());
                         }
-                        Glide.with(context).load(otherUserModel.getProfileImage()).into(holder.binding.civProfile);
+                        Glide.with(context).load(otherUserModel.getProfileImage())
+                                .placeholder(R.drawable.person_placeholder_360x360)
+                                .into(holder.binding.civProfile);
                         holder.binding.tvUsername.setText(otherUserModel.getUserName());
                         holder.binding.tvDatetime.setText(FirebaseUtil.formatTimestamp(model.getLastMessageTimestamp()));
                         //holder.binding.tvMessageCount.setText(model.getMessageCount());

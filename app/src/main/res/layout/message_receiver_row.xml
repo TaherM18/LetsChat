@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/message_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_rounded_corner"
+            android:backgroundTint="@color/color_message_receiver"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/txt_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello! How are you?"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11:0 AM"
+                android:textColor="#ccc"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_message" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imgReaction"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/emoji_24"
+            android:layout_below="@id/message_layout"
+            android:layout_alignStart="@+id/message_layout"
+            android:background="@drawable/circular_background"
+            android:backgroundTint="@color/color_message_receiver"
+            android:padding="4dp"
+            android:layout_marginTop="-16dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</layout>

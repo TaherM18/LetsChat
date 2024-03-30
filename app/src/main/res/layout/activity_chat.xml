@@ -2,13 +2,14 @@
 <layout>
 
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/chat_background_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.chat.ChatActivity"
-    style="@style/ThemeOverlay.MaterialComponents">
+    android:background="@drawable/chat_background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -42,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layout_input"
-        tools:listitem="@layout/chat_message_row"/>
+        tools:listitem="@layout/message_sender_row"/>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

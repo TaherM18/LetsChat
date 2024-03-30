@@ -77,10 +77,10 @@ public class ProfileAuthActivity extends AppCompatActivity {
         });
     }
 
-    private void setUserData() {
+    private void setUserData(String imgUrl) {
         String userId = FirebaseAuth.getInstance().getUid();
         String userName = binding.edtUsername.getText().toString();
-        String profileImageUrl = imageUri.toString();
+        String profileImageUrl = imgUrl;
         Timestamp timeStamp = Timestamp.now();
 
         UserModel userModel = new UserModel(userId, userName, phoneNumber, profileImageUrl, timeStamp);
@@ -118,12 +118,9 @@ public class ProfileAuthActivity extends AppCompatActivity {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnGo, true);
 
         if (imageUri == null) {
-            // profile image is not picked and not loaded from firebase
-            int resourceId = R.drawable.person_placeholder_360x360;
-            imageUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
-        }
-        else {
-            // profile image picked or set from firebase
+            // profile image not picked
+            setUserData("");
+            return;
         }
 
         // Create a storage reference to "profile_images" folder
@@ -143,7 +140,7 @@ public class ProfileAuthActivity extends AppCompatActivity {
                             // set selected uri to firebase uri
                             imageUri = uri;
                             // Store the download URL in a Firestore document
-                            setUserData();
+                            setUserData(uri.toString());
                         }
                     });
                 }
