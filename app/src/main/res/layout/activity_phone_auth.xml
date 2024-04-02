@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp"
-        tools:context=".view.auth.PhoneAuthActivity">
+        tools:context=".view.auth.PhoneAuthActivity"
+        android:background="?attr/colorOnSurfaceInverse">
 
         <TextView
             android:id="@+id/txt_1"
@@ -85,7 +86,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="We will need to verify your account. What's your number?"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +98,9 @@
             android:layout_height="wrap_content"
             app:ccp_showFlag="true"
             app:ccp_showNameCode="false"
+            app:ccpDialog_textColor="?attr/colorOnSurface"
+            app:ccp_arrowColor="?attr/colorOnSurface"
+            app:ccp_contentColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="@+id/edt_phone"
             app:layout_constraintEnd_toStartOf="@+id/edt_phone"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -113,6 +117,8 @@
             android:digits="9876543210"
             android:ems="10"
             android:hint="Phone Number"
+            android:textColorHint="?attr/colorControlNormal"
+            android:textColor="?attr/colorOnSurface"
             android:inputType="phone"
             app:layout_constraintVertical_bias="0.25"
             app:layout_constraintBottom_toTopOf="@+id/btn_next"

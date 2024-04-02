@@ -27,6 +27,7 @@ public class ViewImageActivity extends AppCompatActivity {
         // Set Custom ActionBar
         setSupportActionBar(binding.materialToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("userName"));
 
         binding.zoomageView.setImageBitmap(Common.IMAGE_BITMAP);
         binding.zoomageView.setScaleType(ImageView.ScaleType.FIT_CENTER);

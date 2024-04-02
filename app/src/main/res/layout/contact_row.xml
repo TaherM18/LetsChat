@@ -7,7 +7,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="?attr/colorOnSurfaceInverse">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_profile"
@@ -27,6 +28,7 @@
             tools:text="Name"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/civ_profile"

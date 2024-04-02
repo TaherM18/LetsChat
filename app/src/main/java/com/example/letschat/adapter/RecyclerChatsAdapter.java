@@ -1,7 +1,10 @@
 package com.example.letschat.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +12,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.letschat.R;
+import com.example.letschat.common.Common;
 import com.example.letschat.databinding.RecentChatRowBinding;
 import com.example.letschat.model.ChatroomModel;
 import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.AndroidUtil;
 import com.example.letschat.utils.FirebaseUtil;
 import com.example.letschat.view.chat.ChatActivity;
+import com.example.letschat.view.display.ViewImageActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,7 +86,17 @@ public class RecyclerChatsAdapter extends FirestoreRecyclerAdapter<ChatroomModel
                         holder.binding.civProfile.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AndroidUtil.transitToViewImage(context, holder.binding.civProfile);
+                                holder.binding.civProfile.invalidate();
+                                Drawable drawable = holder.binding.civProfile.getDrawable();
+                                Common.IMAGE_BITMAP = ((BitmapDrawable)drawable.getCurrent()).getBitmap();
+                                ActivityOptionsCompat activityOptionsCompat =
+                                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                                                holder.binding.civProfile, "image");
+
+                                Intent intent = new Intent(context, ViewImageActivity.class);
+                                intent.putExtra("userName", holder.binding.tvUsername.getText().toString());
+                                intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                                context.startActivity(intent, activityOptionsCompat.toBundle());
                             }
                         });
 

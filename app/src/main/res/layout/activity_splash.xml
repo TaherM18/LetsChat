@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.startup.SplashActivity">
+    tools:context=".view.startup.SplashActivity"
+    android:background="?attr/colorOnSurfaceInverse">
 
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:src="@drawable/lets_chat"
+        android:src="@drawable/letschat_foreground"
         app:layout_constraintVertical_bias="0.45"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,11 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textStyle="bold"
-        android:textSize="32sp"
-        android:textColor="@color/cardview_dark_background"
-        android:fontFamily="monospace"
-
+        android:textSize="24sp"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo"
@@ -39,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="from"
-        android:textColor="@color/cardview_dark_background"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -58,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtFrom"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:textColor="#00A36C"/>
+        android:textColor="@color/color_primary"/>
 
     <ProgressBar
         android:id="@+id/progress"

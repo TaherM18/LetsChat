@@ -85,6 +85,7 @@ public class AndroidUtil {
                         circleImageView, "image");
 
         Intent intent = new Intent(context, ViewImageActivity.class);
+        // intent.putExtra("userName", )
         intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         context.startActivity(intent, activityOptionsCompat.toBundle());
     }

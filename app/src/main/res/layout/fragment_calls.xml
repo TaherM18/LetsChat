@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".menu.CallsFragment">
+    tools:context=".menu.CallsFragment"
+    android:background="?attr/colorOnSurfaceInverse">
 
     <TextView
         android:id="@+id/tv_recent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Recent"
-        android:textSize="16sp"
+        android:textSize="18sp"
+        android:textColor="@color/material_on_surface_emphasis_high_type"
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
