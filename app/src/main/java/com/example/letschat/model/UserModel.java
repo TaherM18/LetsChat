@@ -8,17 +8,20 @@ public class UserModel {
     private String bio;
     private String phone;
     private String profileImage;
-    private Timestamp createdTimestamp;
+    private Timestamp createdTimestamp, updatedTimestamp;
     private String fcmToken;
+    private boolean online;
+    private String chatroomId;
 
     public UserModel() {}
 
-    public UserModel(String userId, String userName, String phone, String profileImage, Timestamp createdTimestamp) {
+    public UserModel(String userId, String userName, String phone, String profileImage) {
         this.userId = userId;
         this.userName = userName;
         this.phone = phone;
         this.profileImage = profileImage;
-        this.createdTimestamp = createdTimestamp;
+        this.createdTimestamp = Timestamp.now();
+        this.updatedTimestamp = Timestamp.now();
     }
 
     public String getUserId() {
@@ -61,6 +64,14 @@ public class UserModel {
         this.createdTimestamp = createdTimestamp;
     }
 
+    public Timestamp getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(Timestamp updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
     public String getBio() {
         return bio;
     }
@@ -77,6 +88,21 @@ public class UserModel {
         this.fcmToken = fcmToken;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public String getChatroomId() {
+        return chatroomId;
+    }
+
+    public void setChatroomId(String chatroomId) {
+        this.chatroomId = chatroomId;
+    }
 
     @Override
     public String toString() {

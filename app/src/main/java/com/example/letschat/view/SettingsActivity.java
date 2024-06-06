@@ -30,11 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private ActivitySettingsBinding binding;
     private FirebaseUser firebaseUser;
-    private FirebaseFirestore firestore;
     private UserModel userModel;
 
     @Override
@@ -45,8 +44,6 @@ public class SettingsActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
         setSupportActionBar(binding.materialToolbar);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        firestore = FirebaseFirestore.getInstance();
-
         AndroidUtil.setProgressBar(binding.progressBar, true);
 
         if (firebaseUser != null) {

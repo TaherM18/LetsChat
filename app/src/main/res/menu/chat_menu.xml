@@ -11,9 +11,10 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_call"
-        android:title="Call"
-        android:icon="@drawable/phone_24"
-        android:iconTint="@color/white" />
+        android:id="@+id/menu_wallpaper"
+        android:title="Wallpaper"
+        android:icon="@drawable/image_24"
+        android:iconTint="@color/white"
+        app:showAsAction="always"/>
 
 </menu>

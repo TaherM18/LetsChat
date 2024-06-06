@@ -69,8 +69,7 @@ public class SetUserInfoActivity extends AppCompatActivity {
                     firebaseUser.getUid(),
                     binding.etName.getText().toString(),
                     firebaseUser.getPhoneNumber(),
-                    "",
-                    Timestamp.now());
+                    "");
             firestore.collection("Users").document(firebaseUser.getUid()).set(user)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

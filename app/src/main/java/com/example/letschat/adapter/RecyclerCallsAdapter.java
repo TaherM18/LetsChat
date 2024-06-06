@@ -1,44 +1,36 @@
 package com.example.letschat.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.telecom.Call;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.CallLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.letschat.R;
-import com.example.letschat.model.CallModel;
-import com.example.letschat.model.ChatModel;
+import com.example.letschat.databinding.CallRowBinding;
+import com.example.letschat.model.ContactModel;
+import com.example.letschat.utils.AndroidUtil;
+import com.example.letschat.utils.FirebaseUtil;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdapter.ViewHolder> {
 
     private Context context;
-    private List<CallModel> callModelList;
+    private List<ContactModel> contactModelList;
     private int lastPosition = -1;
 
-    private enum CallType {
-        incoming,
-        outgoing
-    }
-
-    public RecyclerCallsAdapter(Context context, List<CallModel> callModelList) {
+    public RecyclerCallsAdapter(Context context, List<ContactModel> contactModelList) {
         this.context = context;
-        this.callModelList = callModelList;
+        this.contactModelList = contactModelList;
     }
 
 
@@ -52,40 +44,49 @@ public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CallModel callModel = callModelList.get(position);
+        ContactModel model = contactModelList.get(position);
 
-        Glide.with(context).load(callModel.getProfileUrl()).into(holder.imgProfile);
-        holder.txtUsername.setText(callModel.getUsername());
-        holder.txtTime.setText(callModel.getDatetime());
+        if (model.getPhotoUri() != null) {
+            Glide.with(context).load(model.getPhotoUri()).into(holder.binding.civProfile);
+        }
+        else {
+            Glide.with(context).load(R.drawable.person_placeholder_360x360).into(holder.binding.civProfile);
+        }
+        holder.binding.tvUsername.setText(model.getName());
+        holder.binding.tvDatetime.setText(AndroidUtil.formatDate(model.getDate()));
         setAnimation(holder.itemView, position);
 
-        if (callModel.getCallType().equals("missed")) {
-            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.call_received_24));
-            holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_red_dark));
-        }
-        else if (callModel.getCallType().equals("incoming")) {
-            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.call_received_24));
-            holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
-        }
-        else { // outgoing
-            holder.imgArrow.setImageDrawable(context.getDrawable(R.drawable.call_made_24));
-            holder.imgArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
-
+        switch (model.getCallType()) {
+            case CallLog.Calls.INCOMING_TYPE:
+                holder.binding.ivArrow.setImageDrawable(context.getDrawable(R.drawable.call_received_24));
+                holder.binding.ivArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
+                break;
+            case CallLog.Calls.OUTGOING_TYPE:
+                holder.binding.ivArrow.setImageDrawable(context.getDrawable(R.drawable.call_made_24));
+                holder.binding.ivArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_green_dark));
+                break;
+            case CallLog.Calls.MISSED_TYPE:
+                holder.binding.ivArrow.setImageDrawable(context.getDrawable(R.drawable.call_received_24));
+                holder.binding.ivArrow.getDrawable().setTint(context.getResources().getColor(android.R.color.holo_red_dark));
+                break;
+            default:
+                holder.binding.ivArrow.setImageDrawable(context.getDrawable(R.drawable.phone_24));
+                break;
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent chatIntent = new Intent(context, ChatActivity.class);
-//                chatIntent.putExtra("userId", chatModelList.get(position).getUsername());
-//                context.startActivity(chatIntent);
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:"+model.getNumber()));
+                context.startActivity(callIntent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return callModelList.size();
+        return contactModelList.size();
     }
 
 
@@ -94,20 +95,11 @@ public class RecyclerCallsAdapter extends RecyclerView.Adapter<RecyclerCallsAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView imgProfile;
-        private TextView txtUsername, txtTime, txtContact;
-        private ImageButton imgBtnCall;
-        private ImageView imgArrow;
-        private ConstraintLayout constraintLayout;
+        CallRowBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imgProfile = itemView.findViewById(R.id.civ_profile);
-            txtUsername = itemView.findViewById(R.id.tv_username);
-            imgArrow = itemView.findViewById(R.id.iv_arrow);
-            imgBtnCall = itemView.findViewById(R.id.ib_call);
-            txtTime = itemView.findViewById(R.id.tv_datetime);
+            binding = CallRowBinding.bind(itemView);
         }
     }
 

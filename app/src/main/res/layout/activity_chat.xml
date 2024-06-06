@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/chat_background_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.chat.ChatActivity"
@@ -27,7 +26,7 @@
             android:layout_height="match_parent"
             app:title="Ammar"
             app:titleTextColor="@color/white"
-            app:subtitle="Online"
+            tools:subtitle="Online"
             app:subtitleTextColor="@color/off_white"
             app:navigationIcon="@drawable/arrow_back_24"
             app:navigationIconTint="@color/white"
@@ -44,6 +43,173 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layout_input"
         tools:listitem="@layout/message_sender_row"/>
+    
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_attach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/layout_input"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        android:visibility="gone">
+        
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:rowCount="2"
+            android:columnCount="3">
+
+            <RelativeLayout
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_document"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/description_24"
+                    android:layout_centerHorizontal="true"
+                    android:tint="@android:color/holo_purple"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_document"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Document"
+                    android:layout_below="@id/civ_document"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_camera"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/photo_camera_24"
+                    android:layout_centerHorizontal="true"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Camera"
+                    android:layout_below="@id/civ_camera"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_gallery"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/photo_library_24"
+                    android:layout_centerHorizontal="true"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gallery"
+                    android:layout_below="@id/civ_gallery"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+<!--            -->
+
+            <RelativeLayout
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_audio"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/audiotrack_24"
+                    android:layout_centerHorizontal="true"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Audio"
+                    android:layout_below="@id/civ_audio"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_contact"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/person_24"
+                    android:layout_centerHorizontal="true"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contact"
+                    android:layout_below="@id/civ_contact"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_row="1"
+                android:layout_column="2"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:padding="8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_location"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/location_on_24"
+                    android:layout_centerHorizontal="true"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:layout_below="@id/civ_location"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+        </GridLayout>
+        
+    </com.google.android.material.card.MaterialCardView>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,28 +234,23 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/cardview_light_background">
-
-                <ImageButton
-                    android:id="@+id/img_btn_emoji"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/emoji_24"
-                    android:padding="8dp"
-                    android:layout_margin="4dp"
-                    app:tint="@android:color/darker_gray"
-                    android:background="@drawable/circular_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                android:background="?attr/colorOnSurfaceInverse">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_message"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:maxHeight="144dp"
                     android:hint="Message"
+                    tools:text="sdsd"
+                    android:textSize="16dp"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColorHint="?attr/colorControlNormal"
                     android:backgroundTint="@color/color_primary"
-                    app:layout_constraintStart_toEndOf="@id/img_btn_emoji"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/img_btn_attach"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -102,20 +263,7 @@
                     android:padding="8dp"
                     android:layout_margin="4dp"
                     android:background="@drawable/circular_background"
-                    app:tint="@android:color/darker_gray"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/img_btn_camera"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <ImageButton
-                    android:id="@+id/img_btn_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/photo_camera_24"
-                    android:padding="8dp"
-                    android:layout_margin="4dp"
-                    android:background="@drawable/circular_background"
-                    app:tint="@android:color/darker_gray"
+                    app:tint="?attr/colorControlNormal"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -138,6 +286,16 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

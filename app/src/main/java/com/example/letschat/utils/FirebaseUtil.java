@@ -17,28 +17,34 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class FirebaseUtil {
-    public static String collectionName = "users";
     public static String usersCollection = "users";
     public static String chatroomsCollection = "chatrooms";
+    public static String roboChatroomsCollection = "robo_chatrooms";
+    public static String statusCollection = "status";
 
-    public static String currentUserId() {
-        return FirebaseAuth.getInstance().getUid();
-    }
-    public static DocumentReference currentUserDocument() {
-        return FirebaseFirestore.getInstance().collection(collectionName).document(currentUserId());
-    }
+        public static String currentUserId() {
+            return FirebaseAuth.getInstance().getUid();
+        }
+        public static DocumentReference currentUserDocument() {
+            return FirebaseFirestore.getInstance().collection(usersCollection).document(currentUserId());
+        }
 
-    public static CollectionReference allUserCollectionReference() {
-        return FirebaseFirestore.getInstance().collection(usersCollection);
-    }
+        public static CollectionReference allUserCollectionReference() {
+            return FirebaseFirestore.getInstance().collection(usersCollection);
+        }
 
     public static CollectionReference allChatroomCollectionReference() {
         return FirebaseFirestore.getInstance().collection(chatroomsCollection);
+    }
+
+    public static CollectionReference allStatusCollectionReference() {
+        return FirebaseFirestore.getInstance().collection(statusCollection);
     }
 
     public static boolean isLoggedIn() {
@@ -59,6 +65,15 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection(chatroomsCollection).document(chatroomId);
     }
 
+    public static DocumentReference getRoboChatroomReference(String chatroomId) {
+        return FirebaseFirestore.getInstance().collection("robo_chatrooms").document(chatroomId);
+    }
+
+    public static DocumentReference getStatusDocumentReference() {
+
+        return FirebaseFirestore.getInstance().collection("status").document(currentUserId());
+    }
+
     public static String getChatroomId(String userId1, String userId2) {
         if (userId1.hashCode() < userId2.hashCode()) {
             return userId1+"_"+userId2;
@@ -70,6 +85,10 @@ public class FirebaseUtil {
 
     public static CollectionReference getChatroomMessageReference(String chatroomId) {
         return getChatroomReference(chatroomId).collection("chats");
+    }
+
+    public static CollectionReference getRoboChatroomMessageReference(String chatroomId) {
+        return getRoboChatroomReference(chatroomId).collection("chats");
     }
 
     public static DocumentReference getOtherUserFromChatroom(List<String> userIds) {
@@ -85,10 +104,24 @@ public class FirebaseUtil {
         // Convert the Timestamp to a Date
         Date date = timestamp.toDate();
 
-        // Create a SimpleDateFormat object with the desired format
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        // Get the current date and time
+        Calendar currentDate = Calendar.getInstance();
 
-        // Format the Date to a String in the desired format and return
-        return sdf.format(date);
+        // Convert the timestamp date to Calendar
+        Calendar timestampDate = Calendar.getInstance();
+        timestampDate.setTime(date);
+
+        // Check if the timestamp is from today
+        if (currentDate.get(Calendar.YEAR) == timestampDate.get(Calendar.YEAR) &&
+                currentDate.get(Calendar.MONTH) == timestampDate.get(Calendar.MONTH) &&
+                currentDate.get(Calendar.DAY_OF_MONTH) == timestampDate.get(Calendar.DAY_OF_MONTH)) {
+            // If the timestamp is from today, format as time
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+            return timeFormat.format(date);
+        } else {
+            // If the timestamp is not from today, format as date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a | dd/MM/yyyy", Locale.getDefault());
+            return dateFormat.format(date);
+        }
     }
 }

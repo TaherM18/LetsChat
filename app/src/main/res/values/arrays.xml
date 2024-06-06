@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="entries">
+        <item>10f</item>
+        <item>20f</item>
+        <item>30f</item>
+        <item>40f</item>
+    </array>
+</resources>

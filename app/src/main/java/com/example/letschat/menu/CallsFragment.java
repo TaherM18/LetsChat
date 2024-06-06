@@ -1,20 +1,38 @@
 package com.example.letschat.menu;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.letschat.R;
 import com.example.letschat.adapter.RecyclerCallsAdapter;
-import com.example.letschat.adapter.RecyclerChatsAdapter;
-import com.example.letschat.model.CallModel;
+import com.example.letschat.databinding.FragmentCallsBinding;
+import com.example.letschat.model.ContactModel;
+import com.example.letschat.model.UserModel;
+import com.example.letschat.utils.AndroidUtil;
+import com.example.letschat.utils.FirebaseUtil;
+import com.example.letschat.view.contact.ContactsActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +40,17 @@ import java.util.List;
 
 public class CallsFragment extends Fragment {
 
+    private FragmentCallsBinding binding;
+    private static final int REQUEST_CODE_READ_CALL_LOG = 2;
     private RecyclerView recyclerCallsView;
-    private List<CallModel> callModelList = new LinkedList<>();
+    private List<String> userPhoneNumbers = new LinkedList<>();
+    private List<ContactModel> contactModelList = new LinkedList<>();
     private RecyclerCallsAdapter recyclerCallsAdapter;
+    private FirebaseFirestore firestore;
 
     public CallsFragment() {
         // Required empty public constructor
+        firestore = FirebaseFirestore.getInstance();
     }
 
 
@@ -35,20 +58,129 @@ public class CallsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_calls, container, false);
-        recyclerCallsView = view.findViewById(R.id.recycler_view);
-        recyclerCallsView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding = FragmentCallsBinding.inflate(inflater, container, false);
 
-        for (int i = 0; i < 20; i++) {
-            callModelList.add(new CallModel("data:image/jpeg;base64,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",
-                    "Vedant Patel", "incoming", "11:22 AM"));
+        // Access the root view of the binding
+        View rootView = binding.getRoot();
+
+        getContactList();
+
+        return rootView;
+    }
+
+    // FUNCTIONS ===================================================================================
+
+    // Retrieve contacts from Firestore
+    private void getContactList() {
+        AndroidUtil.setProgressBar(binding.progressBar, true);
+
+        firestore.collection(FirebaseUtil.usersCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            for (QueryDocumentSnapshot documentSnapshot : querySnapshot) {
+                                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                                userPhoneNumbers.add(userModel.getPhone());
+                            }
+
+                            getCallLog();
+                        } else {
+                            Toast.makeText(getContext(), "Failed to retrieve user contacts", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
+    // Retrieve and Compare call log with users list
+    private void getCallLog() {
+        // Check read call log permission
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                android.Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+
+            Cursor cursor = getContext().getContentResolver().query(CallLog.Calls.CONTENT_URI,
+                    null, null, null, CallLog.Calls.DATE + " DESC");
+
+            // Iterate through call log entries
+            try {
+                if (cursor != null && cursor.getCount() > 0) {
+                    while (cursor.moveToNext()) {
+                        String photoUri = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.CACHED_PHOTO_URI));
+                        String contactName = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.CACHED_NAME));
+                        String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER));
+                        long callDate = Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.DATE)));
+                        int callType = cursor.getInt(cursor.getColumnIndexOrThrow(CallLog.Calls.TYPE));
+
+
+                        // Check if phone number exists in contacts list
+                        if (userPhoneNumbers.contains(phoneNumber)) {
+                            ContactModel contact = new ContactModel(photoUri, contactName, phoneNumber, callDate, callType);
+                            contactModelList.add(contact);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "No Contacts Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Exception in retrieving call logs:\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+
+                AndroidUtil.setProgressBar(binding.progressBar, false);
+                setupRecyclerView();
+            }
+        }
+        else {
+            // Permission is not granted, request permission
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_CALL_LOG},
+                    REQUEST_CODE_READ_CALL_LOG);
         }
 
-        recyclerCallsAdapter = new RecyclerCallsAdapter(getContext(), callModelList);
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        recyclerCallsView.addItemDecoration(itemDecoration);
-        recyclerCallsView.setAdapter(recyclerCallsAdapter);
+    }
 
-        return view;
+
+    private void setupRecyclerView() {
+        recyclerCallsAdapter = new RecyclerCallsAdapter(getContext(), contactModelList);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        binding.recyclerView.addItemDecoration(itemDecoration);
+        binding.recyclerView.setAdapter(recyclerCallsAdapter);
+    }
+
+    // OVERRIDES ===================================================================================
+
+    // Override onRequestPermissionsResult to handle the contacts permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_READ_CALL_LOG) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, load call logs
+                getCallLog();
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(getContext(), "Call log permission denied", Toast.LENGTH_SHORT).show();
+                // Permission is not granted, request it
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CALL_LOG},
+                        REQUEST_CODE_READ_CALL_LOG);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getContactList();
     }
 }

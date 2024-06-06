@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp"
+        android:background="?attr/colorOnSurfaceInverse"
         tools:context=".view.auth.OtpAuthActivity">
 
         <TextView
@@ -86,9 +87,9 @@
             android:cursorVisible="true"
             android:digits="1234567890"
             android:inputType="number"
-            android:itemBackground="@color/white"
-            android:text=""
-            android:textColor="@color/black"
+            android:itemBackground="?attr/colorControlHighlight"
+            tools:text=""
+            android:textColor="?attr/colorOnSurface"
             app:hideLineWhenFilled="true"
             app:itemCount="6"
             app:itemHeight="50dp"

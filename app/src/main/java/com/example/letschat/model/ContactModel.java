@@ -1,7 +1,17 @@
 package com.example.letschat.model;
 
 public class ContactModel {
-    private  String profileImage, name, number;
+    private  String photoUri, name, number;
+    long date;
+    private int callType;
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
+    }
 
     public String getName() {
         return name;
@@ -19,17 +29,38 @@ public class ContactModel {
         this.number = number;
     }
 
-    public String getProfileImage() {
-        return profileImage;
+    public long getDate() {
+        return date;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setDate(long date) {
+        this.date = date;
     }
 
-    public ContactModel(String profileImage, String name, String number) {
-        this.profileImage = profileImage;
+    public int getCallType() {
+        return callType;
+    }
+
+    public void setCallType(int callType) {
+        this.callType = callType;
+    }
+
+    public ContactModel(String photoUri, String name, String number, long date, int callType) {
+        this.photoUri = photoUri;
         this.name = name;
         this.number = number;
+        this.date = date;
+        this.callType = callType;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactModel{" +
+                "photoUri='" + photoUri + '\'' +
+                ", name='" + name + '\'' +
+                ", number='" + number + '\'' +
+                ", date='" + date + '\'' +
+                ", callType=" + callType +
+                '}';
     }
 }

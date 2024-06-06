@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:visibility="visible"
             tools:listitem="@layout/recent_chat_row"
+            android:background="?attr/selectableItemBackground"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Invite your Friends"
+            android:text="Chat with your Friends"
             android:textColor="@color/color_primary"
             android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,19 +45,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="None of your contacts are using LetsChat.\nUse the button below to invite them."
+            android:text="You have not initiated chat with \nany of the contacts on LetChat."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_heading" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_invite"
+            android:id="@+id/btn_contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
-            android:text="Invite a Friend"
+            android:text="See all Contacts"
             android:textColor="@color/white"
             app:backgroundTint="@color/color_primary"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +74,7 @@
             android:text="Chat with your your friends who are using LetsChat on Android phone."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_invite" />
+            app:layout_constraintTop_toBottomOf="@id/btn_contacts" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

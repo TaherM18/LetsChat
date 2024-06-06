@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.letschat"
         minSdk = 27
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -50,7 +50,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.1")
     // BoM for Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-    implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     // FirebaseUI for Cloud Firestore
@@ -71,6 +70,16 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     // Android Reactions
     implementation("com.github.pgreze:android-reactions:1.6")
+    // Karumi Dexter for managing Permissions
+    implementation("com.karumi:dexter:6.2.3")
+    // CircleStatusView for Status/Stories
+    implementation("com.github.3llomi:CircularStatusView:V1.0.3")
+    // Story View for Status
+    implementation("com.github.OMARIHAMZA:StoryView:1.0.2-alpha")
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

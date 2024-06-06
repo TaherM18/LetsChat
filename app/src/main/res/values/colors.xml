@@ -12,4 +12,10 @@
 
     <color name="color_message_sender">#3F51B5</color>
     <color name="color_message_receiver">#4CAF50</color>
+
+    <color name="message_read">#00008B</color>
+
+    <color name="ucrop_color_toolbar">@color/color_primary</color>
+    <color name="ucrop_color_statusbar">@color/color_primary</color>
+    <color name="ucrop_color_widget_active">@color/color_primary</color>
 </resources>

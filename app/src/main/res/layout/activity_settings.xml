@@ -13,13 +13,14 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/color_primary">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/material_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_primary"
+
                 app:navigationIcon="@drawable/arrow_back_24"
                 app:navigationIconTint="@color/white"
                 app:title="Settings"

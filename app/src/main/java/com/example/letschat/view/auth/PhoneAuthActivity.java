@@ -32,9 +32,6 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
     private ActivityPhoneAuthBinding binding;
     private static final String TAG = "PhoneAuthActivity";
-    private String phoneNumber;
-    private Long timeoutSeconds = 60L;
-    private String verificationCode;
     private PhoneAuthProvider.ForceResendingToken resendingToken;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 

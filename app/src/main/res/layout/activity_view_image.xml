@@ -22,9 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Profile Image"
-                app:titleTextColor="@color/white"
+                app:titleTextColor="?attr/colorOnSurface"
                 app:navigationIcon="@drawable/arrow_back_24"
-                app:navigationIconTint="@color/white"
+                app:navigationIconTint="?attr/colorOnSurface"
                 app:menu="@menu/profile_image_menu"/>
 
         </com.google.android.material.appbar.AppBarLayout>

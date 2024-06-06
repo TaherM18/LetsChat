@@ -19,21 +19,33 @@ import com.example.letschat.view.chat.ChatActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class RecyclerSearchUserAdapter extends FirestoreRecyclerAdapter<UserModel, RecyclerSearchUserAdapter.ViewHolder> {
+import java.util.List;
 
-    Context context;
-    LayoutInflater layoutInflater;
+public class RecyclerSearchUserAdapter extends RecyclerView.Adapter<RecyclerSearchUserAdapter.ViewHolder> {
 
-    public RecyclerSearchUserAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options, Context context) {
-        super(options);
+    private Context context;
+    private List<UserModel> userModelList;
+    private LayoutInflater layoutInflater;
+
+    public RecyclerSearchUserAdapter(Context context, List<UserModel> userModelList) {
         this.context = context;
+        this.userModelList = userModelList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
+    @NonNull
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull UserModel model) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.contact_row, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        UserModel model = userModelList.get(position);
+
         if (model.getUserName().equals(FirebaseUtil.currentUserId())) {
-            holder.binding.txtContactName.setText(model.getUserName() + " (Me)");
+            holder.binding.txtContactName.setText(model.getUserName() + " (You)");
         }
         else {
             holder.binding.txtContactName.setText(model.getUserName());
@@ -52,16 +64,15 @@ public class RecyclerSearchUserAdapter extends FirestoreRecyclerAdapter<UserMode
         });
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.contact_row, parent, false);
-        return new ViewHolder(view);
+    public int getItemCount() {
+        return userModelList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ContactRowBinding binding;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ContactRowBinding.bind(itemView);

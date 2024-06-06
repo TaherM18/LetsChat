@@ -3,7 +3,6 @@ package com.example.letschat.view.profile;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
@@ -19,26 +18,25 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.letschat.R;
 import com.example.letschat.common.Common;
 import com.example.letschat.databinding.ActivityProfileBinding;
 import com.example.letschat.model.UserModel;
 import com.example.letschat.utils.AndroidUtil;
 import com.example.letschat.utils.FirebaseUtil;
+import com.example.letschat.view.BaseActivity;
 import com.example.letschat.view.display.ViewImageActivity;
 import com.example.letschat.view.startup.SplashActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -47,20 +45,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     private ActivityProfileBinding binding = null;
+    private ActivityResultLauncher<String> galleryLauncher;
     private BottomSheetDialog bottomSheetDialog = null;
-    private int IMAGE_GALLERY_REQUEST = 111;
     private UserModel userModel = null;
-    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private ActivityResultLauncher<Intent> pickImageLauncher, cameraLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Initialization
+        // INITIALIZATION ==========================================================================
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
         setSupportActionBar(binding.materialToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,15 +69,22 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(binding.materialToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        boolean isEdit = getIntent().getBooleanExtra("edit", false);
-        if (isEdit) {
-            launchImagePicker();
-        }
-
         // Get user data from firestore
         getUserData();
 
         // Initialize the activity result launcher
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        if (result != null) {
+                            // Handle the selected image URI
+                            uploadToFirebaseStorage(result);
+                        }
+                    }
+                });
+
+        // Initialize the activity result launcher for gallery
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -93,41 +99,32 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        // Initialize the activity result launcher for camera
+        cameraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null && data.getData() != null) {
+                                // Handle the selected image URI
+                                uploadToFirebaseStorage(data.getData());
+                            }
+                        }
+                    }
+                });
+
+        // EVENT LISTENERS =========================================================================
 
         // fabCamera onClick Event Listener
         binding.fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View fabCameraView) {
-                launchImagePicker();
-
-//                View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
-//
-//                // cardGallery onClick Event Listener
-//                view.findViewById(R.id.card_gallery).setOnClickListener((View v) -> {
-//                    // openGallery();
-//                    // launchGallery();
-//                    bottomSheetDialog.dismiss();
-//                });
-//
-//                // cardCamera onClick Event Listener
-//                view.findViewById(R.id.card_camera).setOnClickListener((View v) -> {
-//                    openCamera();
-//                    bottomSheetDialog.dismiss();
-//                });
-//
-//                // Set view for BottomSheetDialog and show it
-//                bottomSheetDialog.setContentView(view);
-//                bottomSheetDialog.show();
-//
-//                bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(DialogInterface dialog) {
-//                        dialog.dismiss();
-//                    }
-//                });
+                // launchGallery();
+                // launchImagePicker();
+                openBottomSheetPick();
             }
         });
-
 
         // TextInput Name Event Listener
         binding.edtName.setOnClickListener(new View.OnClickListener() {
@@ -141,15 +138,8 @@ public class ProfileActivity extends AppCompatActivity {
         binding.civProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.civProfile.invalidate();
-                Drawable drawable = binding.civProfile.getDrawable();
-                Common.IMAGE_BITMAP = ((BitmapDrawable) drawable.getCurrent()).getBitmap();
-                ActivityOptionsCompat activityOptionsCompat =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(ProfileActivity.this,
-                                binding.civProfile, "image");
-
-                Intent intent = new Intent(ProfileActivity.this, ViewImageActivity.class);
-                startActivity(intent, activityOptionsCompat.toBundle());
+                AndroidUtil.transitToViewImage(ProfileActivity.this, binding.civProfile,
+                        userModel.getProfileImage(), userModel.getUserName());
             }
         });
 
@@ -169,6 +159,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    // FUNCTIONS ===================================================================================
+
     private void getUserData() {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, true);
         FirebaseUtil.currentUserDocument().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -181,7 +173,10 @@ public class ProfileActivity extends AppCompatActivity {
                     binding.edtName.setText(userModel.getUserName());
                     binding.edtBio.setText(userModel.getBio());
                     binding.edtPhone.setText(userModel.getPhone());
-                    Glide.with(getApplicationContext()).load(userModel.getProfileImage()).into(binding.civProfile);
+                    Glide.with(getApplicationContext())
+                            .load(userModel.getProfileImage())
+                            .fallback(R.drawable.person_placeholder_360x360)
+                            .into(binding.civProfile);
                 } else {
                     AndroidUtil.showToast(getApplicationContext(), "userModel is empty");
                 }
@@ -189,17 +184,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void openGallery() {
-        // No use as startActivityForResult is deprecated
-        Intent iGallery = new Intent();
-        iGallery.setType("image/*");
-        iGallery.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(iGallery, "Select Image"), IMAGE_GALLERY_REQUEST);
+    private void launchGallery() {
+        // Call the launcher to open the gallery
+        galleryLauncher.launch("image/*");
     }
 
     private void launchImagePicker() {
-        ImagePicker.with(ProfileActivity.this).cropSquare().compress(512)
-                .maxResultSize(512, 512)
+//        ImagePicker.with(ProfileActivity.this).cropSquare()
+//                // .compress(1024)
+//                // .maxResultSize(512, 512)
+//                .createIntent(new Function1<Intent, Unit>() {
+//                    @Override
+//                    public Unit invoke(Intent intent) {
+//                        pickImageLauncher.launch(intent);
+//                        return null;
+//                    }
+//                });
+        ImagePicker.with(this)
+                .cropSquare()
+                .galleryOnly()	//User can only select image from Gallery
                 .createIntent(new Function1<Intent, Unit>() {
                     @Override
                     public Unit invoke(Intent intent) {
@@ -207,8 +210,48 @@ public class ProfileActivity extends AppCompatActivity {
                         return null;
                     }
                 });
+
     }
 
+    private void launchCamera() {
+        ImagePicker.with(this)
+                .cropSquare()
+                .cameraOnly()	//User can only capture image using Camera
+                .createIntent(new Function1<Intent, Unit>() {
+                    @Override
+                    public Unit invoke(Intent intent) {
+                        cameraLauncher.launch(intent);
+                        return null;
+                    }
+                });
+    }
+
+    private void openBottomSheetPick() {
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_pick, null);
+
+        // cardGallery onClick Event Listener
+        view.findViewById(R.id.card_gallery).setOnClickListener((View v) -> {
+            launchImagePicker();
+            bottomSheetDialog.dismiss();
+        });
+
+        // cardCamera onClick Event Listener
+        view.findViewById(R.id.card_camera).setOnClickListener((View v) -> {
+            launchCamera();
+            bottomSheetDialog.dismiss();
+        });
+
+        // Set view for BottomSheetDialog and show it
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
+
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });
+    }
 
     private void uploadToFirebaseStorage(Uri imgUri) {
         if (imgUri == null) {
@@ -249,7 +292,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateName(String newName) {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, true);
-        FirebaseUtil.currentUserDocument().update("userName", newName)
+
+        // Create a batch to perform batched updates
+        WriteBatch batch = firestore.batch();
+        batch.update(FirebaseUtil.currentUserDocument(), "userName", newName);
+        batch.update(FirebaseUtil.currentUserDocument(), "updatedTimestamp", Timestamp.now());
+
+        batch.commit()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -267,7 +316,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateBio(String newBio) {
         AndroidUtil.setInProgress(binding.progressBar, binding.btnSignOut, true);
-        FirebaseUtil.currentUserDocument().update("bio", newBio)
+
+        // Create a batch to perform batched updates
+        WriteBatch batch = firestore.batch();
+        batch.update(FirebaseUtil.currentUserDocument(), "bio", newBio);
+        batch.update(FirebaseUtil.currentUserDocument(), "updatedTimestamp", Timestamp.now());
+
+        batch.commit()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -283,7 +338,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateProfile(Uri imageUri) {
-        FirebaseUtil.currentUserDocument().update("profileImage", imageUri)
+        // Create a batch to perform batched updates
+        WriteBatch batch = firestore.batch();
+        batch.update(FirebaseUtil.currentUserDocument(), "profileImage", imageUri.toString());
+        batch.update(FirebaseUtil.currentUserDocument(), "updatedTimestamp", Timestamp.now());
+
+        batch.commit()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -295,7 +355,7 @@ public class ProfileActivity extends AppCompatActivity {
                             AndroidUtil.setImageWithGlide(getApplicationContext(), imageUri, binding.civProfile);
                         } else {
                             AndroidUtil.showToast(ProfileActivity.this,
-                                    "Failed to Update Name:\n" + task.getException().getMessage());
+                                    "Failed to Update Profile Image:\n" + task.getException().getMessage());
                         }
                     }
                 });

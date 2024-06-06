@@ -10,6 +10,7 @@ public class ChatroomModel {
     private Timestamp lastMessageTimestamp;
     private String lastMessageSenderId;
     private String lastMessage;
+    private String chatWallpaperUrl;
 
     public ChatroomModel() {
     }
@@ -59,5 +60,13 @@ public class ChatroomModel {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public String getChatWallpaperUrl() {
+        return chatWallpaperUrl;
+    }
+
+    public void setChatWallpaperUrl(String chatWallpaperUrl) {
+        this.chatWallpaperUrl = chatWallpaperUrl;
     }
 }
